@@ -73,11 +73,6 @@ if ([string]::IsNullOrWhiteSpace($From)) {
 	}
 }
 
-$DestFile = "$(Join-Path -Path $OutputDir -ChildPath "$VersionName.md")"
-
-$BaseUrl = "$(git remote get-url origin)" -replace '.github.io.git', ''
-$ChangelogDate = git log -1 --format="%cI" "$To"
-
 $SectionHeaders = [ordered]@{
 	build = '### Builds'
 	breaking = '### Breaking Changes'
@@ -125,6 +120,9 @@ ForEach-Object {
 Group-Object -Property 'Group' |
 Sort-Object -Property @{ Expression = { [Array]::IndexOf($SectionHeaders.Keys, $_.Name) } }
 
+
+$BaseUrl = "$(git remote get-url origin)" -replace '.github.io.git', ''
+$ChangelogDate = git log -1 --format="%cI" "$To"
 $ChangelogHeader = @"
 ---
 date: $ChangelogDate
@@ -134,7 +132,12 @@ versionName: $VersionName
 [compare changes]($BaseUrl/compare/$From...$VersionName)
 "@
 
-$ChangelogHeader | Out-File $DestFile -Encoding 'UTF8'
+if (-not (Test-Path $OutputDir)) {
+	New-Item -Path $OutputDir -ItemType 'Directory' -Force | Out-Null
+}
+
+$DestFile = "$(Join-Path -Path $OutputDir -ChildPath "$VersionName.md")"
+$ChangelogHeader | Out-File $DestFile -Encoding 'UTF8' -Force
 
 $Commits |
 ForEach-Object {
