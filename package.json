@@ -43,7 +43,7 @@
 		"typecheck": "tsc --noEmit",
 		"lint:js": "oxlint --fix",
 		"lint": "pnpm run typecheck && pnpm run lint:js",
-		"postversion": "src/Export-Changelog.ps1 -OutputDir \"docs/changelog\" -PackagePath \"package.json\" -Push -CreateRelease"
+		"postversion": "pwsh -f \"./src/Export-Changelog.ps1\" -OutputDir \"docs/changelog\" -PackagePath \"package.json\" -Push -CreateRelease"
 	},
 	"devDependencies": {
 		"@types/node": "26.1.0",
