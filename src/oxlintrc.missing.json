@@ -1,0 +1,72 @@
+{
+	"consistent-this": ["warn", "self"],
+	"no-unreachable-loop": "error",
+	"one-var": ["warn", "never"],
+
+	"import/no-extraneous-dependencies": "error",
+	"import/no-useless-path-segments": "warn",
+
+	"typescript/prefer-destructuring": "warn",
+
+	"typescript/naming-convention": ["error", {
+		"selector": "default",
+		"format": ["PascalCase", "camelCase"],
+		"leadingUnderscore": "allow",
+		"trailingUnderscore": "forbid",
+		"filter": {
+			"regex": "^(_id|__v)$",
+			"match": false
+		}
+	}, {
+		"selector": "enumMember",
+		"format": ["UPPER_CASE"],
+		"leadingUnderscore": "forbid",
+		"trailingUnderscore": "forbid"
+	}, {
+		"selector": "variable",
+		"format": ["PascalCase", "camelCase", "UPPER_CASE"],
+		"leadingUnderscore": "forbid",
+		"trailingUnderscore": "forbid",
+		"filter": {
+			"regex": "^(_id|__v)$",
+			"match": false
+		}
+	}, {
+		"selector": "variable",
+		"format": ["camelCase", "UPPER_CASE"],
+		"modifiers": ["unused"],
+		"leadingUnderscore": "require",
+		"trailingUnderscore": "forbid"
+	}, {
+		"selector": "objectLiteralMethod",
+		"format": null,
+		"leadingUnderscore": "forbid",
+		"trailingUnderscore": "forbid"
+	}, {
+		"selector": "objectLiteralProperty",
+		"format": null,
+		"leadingUnderscore": "forbid",
+		"trailingUnderscore": "forbid",
+		"filter": {
+			"regex": "^(_id|__v)$",
+			"match": false
+		}
+	}, {
+		"selector": "typeProperty",
+		"format": null,
+		"leadingUnderscore": "forbid",
+		"trailingUnderscore": "forbid",
+		"filter": {
+			"regex": "^(_id|__v)$",
+			"match": false
+		}
+	}, {
+		"selector": "typeMethod",
+		"format": null,
+		"leadingUnderscore": "forbid",
+		"trailingUnderscore": "forbid"
+	}, {
+		"selector": "typeLike",
+		"format": ["PascalCase"]
+	}]
+}
