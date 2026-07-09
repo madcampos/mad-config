@@ -1,0 +1,60 @@
+{
+	"name": "@mad-c/config",
+	"version": "1.0.0",
+	"description": "Shared config for different projects",
+	"keywords": [
+		"shared config"
+	],
+	"author": {
+		"name": "madcampos",
+		"url": "https://madcampos.dev/"
+	},
+	"license": "LGPL-2.1-or-later",
+	"homepage": "https://github.com/madcampos/mad-config#readme",
+	"bugs": {
+		"url": "https://github.com/madcampos/mad-config/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/madcampos/mad-config.git"
+	},
+	"funding": [
+		{
+			"type": "Buy Me a Coffee",
+			"url": "https://buymeacoffee.com/madcampos"
+		},
+		{
+			"type": "Ko-Fi",
+			"url": "https://ko-fi.com/madcampos"
+		}
+	],
+	"type": "module",
+	"files": [
+		"src"
+	],
+	"exports": {
+		"./tsconfig.json": "./src/tsconfig.json",
+		"./dprint.json": "./src/dprint.json",
+		"./oxlintrc.json": "./src/oxlintrc.json"
+	},
+	"scripts": {
+		"bootstrap": "pnpm exec puppeteer browsers install",
+
+		"format": "dprint fmt",
+
+		"typecheck": "tsc --noEmit",
+		"lint:js": "oxlint --fix",
+		"lint": "pnpm run typecheck && pnpm run lint:js",
+
+		"prepublishOnly": "",
+		"postpublish": ""
+	},
+	"devDependencies": {
+		"@types/node": "26.1.0",
+		"dprint": "0.55.1",
+		"oxlint": "1.72.0",
+		"oxlint-tsgolint": "0.24.0",
+		"puppeteer": "25.3.0",
+		"typescript": "6.0.3"
+	}
+}

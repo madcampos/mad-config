@@ -1,0 +1,8 @@
+{
+	"include": ["src/**/*", "src/**/*.json", "scripts/**/*"],
+	"exclude": ["node_modules/**/*", "dist/**/*"],
+	"extends": "./src/tsconfig.json",
+	"compilerOptions": {
+		"rootDir": "."
+	}
+}
