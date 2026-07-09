@@ -1,6 +1,6 @@
 {
 	"name": "@mad-c/config",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Shared config for different projects",
 	"keywords": [
 		"shared config"
@@ -39,13 +39,10 @@
 	},
 	"scripts": {
 		"bootstrap": "pnpm exec puppeteer browsers install",
-
 		"format": "dprint fmt",
-
 		"typecheck": "tsc --noEmit",
 		"lint:js": "oxlint --fix",
 		"lint": "pnpm run typecheck && pnpm run lint:js",
-
 		"prepublishOnly": "",
 		"postpublish": ""
 	},
