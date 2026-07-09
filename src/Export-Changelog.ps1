@@ -156,16 +156,15 @@ ForEach-Object {
 
 if ($Commit -or $Push) {
 	git add "$DestFile"
-	git commit -m "$CommitMessage"
+	git commit -m "$CommitMessage" --quiet
 
 	if ($Tag -or $Push) {
-		git tag -a "$VersionName" -m "New version $VersionName"
+		git tag -a "$VersionName" -m "$VersionName"
 	}
 }
 
 if ($Push) {
-	git push --follow-tags
-	git push "$VersionName"
+	git push --follow-tags --quiet
 }
 
 if ($CreateRelease) {
