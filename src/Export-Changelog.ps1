@@ -58,7 +58,7 @@ param (
 )
 
 $VersionName = $To
-if ($BumpVersion -or $Push) {
+if ($Tag -or $Push) {
 	if (Test-Path $PackagePath) {
 		$Package = Get-Content $PackagePath -Raw | ConvertFrom-Json
 		$VersionName = "v$($Package.version)"
