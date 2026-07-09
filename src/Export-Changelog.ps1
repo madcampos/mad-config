@@ -155,21 +155,22 @@ ForEach-Object {
 }
 
 if ($Commit -or $Push) {
-	git add $DestFile
-	git commit -m $CommitMessage
+	git add "$DestFile"
+	git commit -m "$CommitMessage"
 
 	if ($Tag -or $Push) {
-		git tag $VersionName
+		git tag -a "$VersionName" -m "New version $VersionName"
 	}
 }
 
 if ($Push) {
 	git push --follow-tags
+	git push "$VersionName"
 }
 
 if ($CreateRelease) {
 	if (Get-Command gh -ErrorAction SilentlyContinue) {
-		gh release create $VersionName --notes-file $DestFile --title $VersionName
+		gh release create "$VersionName" --notes-file "$DestFile" --title "$VersionName"
 	} else {
 		Write-Warning 'gh CLI not found. Skipping release creation.'
 	}
