@@ -1,0 +1,42 @@
+name: Bug Report
+description: File a bug report to help the project improve.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Describe the bug
+      description: The description of what the bug is.
+      placeholder: Bug description
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: |
+        How can we reproduce the behavior? Please provide a minimal code snippet or a link to a reproduction repository.
+      placeholder: |
+        Steps to reproduce:
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen?
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser and OS versions.
+      placeholder: e.g. Chrome 120 on Windows 11
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context that would help resovle the bug.
