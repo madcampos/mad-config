@@ -1,6 +1,7 @@
 # @mad-c/config
 
 Shared configurations for the following tools:
+
 - [TypeScript](https://www.typescriptlang.org/)
 - [dprint](https://dprint.dev/)
 - [oxlint](https://oxc.rs/docs/guide/usage/linter)
@@ -23,7 +24,7 @@ In your `tsconfig.json`:
 {
 	"extends": "./node_modules/@mad-c/config/tsconfig.json",
 	"include": ["src/**/*", "src/**/*.json"],
-	"exclude": ["node_modules/**/*", "dist/**/*"],
+	"exclude": ["node_modules/**/*", "dist/**/*"]
 }
 ```
 

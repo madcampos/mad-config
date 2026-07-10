@@ -70,7 +70,7 @@
 		"ignoreStartDirective": "dprint-ignore-start",
 		"listIndentKind": "commonMark",
 		"strongKind": "asterisks",
-		"tags": null,
+		"tags": {},
 		"textWrap": "maintain",
 		"unorderedListKind": "dashes"
 	},
