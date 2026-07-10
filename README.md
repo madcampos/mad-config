@@ -5,8 +5,10 @@ Shared configurations for the following tools:
 - [TypeScript](https://www.typescriptlang.org/)
 - [dprint](https://dprint.dev/)
 - [oxlint](https://oxc.rs/docs/guide/usage/linter)
+- Changelog CLI tool to write and update changelogs
 
-All configurations set all available flags.
+> [!NOTE]
+> All the configurations files set all available configurations for that tool.
 
 ## Installation
 
@@ -14,7 +16,7 @@ All configurations set all available flags.
 pnpm add -D @mad-c/config
 ```
 
-## Usage
+## Config Usage
 
 ### TypeScript
 
@@ -49,3 +51,9 @@ In your `.oxlintrc.json`:
 	"extends": ["./node_modules/@mad-c/config/oxlint.json"]
 }
 ```
+
+## Changelog
+
+This is a small CLI tool to get the latest commits from the repository and output a markdown changelog file.
+
+Full docs are available as [docs/changelog.md](./docs/changelog.md).

@@ -118,7 +118,7 @@ if (options.help) {
 	console.log('Generates a Markdown changelog from Git history.\n');
 
 	console.log(styleText('bold', 'Usage:'));
-	console.log('  $ export-changelog [options]\n');
+	console.log('  $ changelog [options]\n');
 
 	console.log(styleText('bold', 'Options:'));
 
