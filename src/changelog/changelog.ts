@@ -47,7 +47,7 @@ export function changelogFromCommits({
 	const sectionHeadersKeys = Object.keys(sectionHeaders);
 
 	const commitMessages = commits
-		.filter(({ hash }) => !hash)
+		.filter(({ hash }) => hash)
 		.map(({ hash, message }) => {
 			const commitRegex = /^(?<type>\w+)(?:\((?<scope>.*)\))?(?<breaking>!)?: (?<desc>.*)$/iu;
 			const match = commitRegex.exec(message);
@@ -65,7 +65,7 @@ export function changelogFromCommits({
 
 				if (breaking) {
 					group = breakingSectionHeader;
-				} else if (type in sectionHeadersKeys) {
+				} else if (sectionHeadersKeys.includes(type)) {
 					group = type;
 				}
 			}

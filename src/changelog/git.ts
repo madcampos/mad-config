@@ -41,7 +41,7 @@ export function getCommits(fromRef: string | undefined, toRef: string) {
 		};
 
 		return commit;
-	}).filter(({ hash }) => !hash);
+	}).filter(({ hash }) => hash);
 
 	return commits;
 }
