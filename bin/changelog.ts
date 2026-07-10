@@ -88,7 +88,7 @@ const config = {
 		short: 's',
 		default: false,
 		help: {
-			message: 'Commit, tag, and push changes to remote.'
+			message: 'Commit and push changes to remote.'
 		}
 	},
 	'create-release': {
@@ -197,10 +197,10 @@ if (!changelogFile) {
 
 if (options.commit || options.push) {
 	commitChangelog(changelogFile, options.message);
+}
 
-	if (options.tag || options.push) {
-		createGitTag(versionName);
-	}
+if (options.tag) {
+	createGitTag(versionName);
 }
 
 if (options.push) {
