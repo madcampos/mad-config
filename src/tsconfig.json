@@ -1,17 +1,12 @@
 {
-	"include": ["src/**/*", "src/**/*.json", "vitest.config.ts", "vite.config.ts"],
-	"exclude": ["node_modules/**/*", "dist/**/*"],
 	"compilerOptions": {
 		"allowArbitraryExtensions": false,
 		"allowImportingTsExtensions": true,
 		"allowJs": true,
-		"allowSyntheticDefaultImports": true,
 		"allowUmdGlobalAccess": false,
 		"allowUnreachableCode": false,
 		"allowUnusedLabels": false,
-		"alwaysStrict": true,
 		"assumeChangesOnlyAffectDirectDependencies": true,
-		"baseUrl": null,
 		"charset": null,
 		"checkJs": true,
 		"composite": true,
@@ -28,13 +23,11 @@
 		"emitDeclarationOnly": false,
 		"emitDecoratorMetadata": true,
 		"erasableSyntaxOnly": true,
-		"esModuleInterop": true,
 		"exactOptionalPropertyTypes": false,
 		"experimentalDecorators": true,
 		"extendedDiagnostics": false,
 		"forceConsistentCasingInFileNames": true,
 		"generateCpuProfile": null,
-		// "ignoreDeprecations": ,
 		"importHelpers": false,
 		"incremental": true,
 		"inlineSourceMap": false,
@@ -45,7 +38,6 @@
 		"jsxFactory": "React.createElement",
 		"jsxFragmentFactory": "React.Fragment",
 		"jsxImportSource": "react",
-		"keyofStringsOnly": false,
 		"lib": ["ESNext"],
 		"libReplacement": false,
 		"listEmittedFiles": false,
@@ -67,11 +59,9 @@
 		"noImplicitOverride": true,
 		"noImplicitReturns": true,
 		"noImplicitThis": true,
-		"noImplicitUseStrict": false,
 		"noLib": false,
 		"noPropertyAccessFromIndexSignature": true,
 		"noResolve": false,
-		"noStrictGenericChecks": false,
 		"noUncheckedIndexedAccess": true,
 		"noUncheckedSideEffectImports": true,
 		"noUnusedLocals": true,
@@ -98,8 +88,6 @@
 		"strictFunctionTypes": true,
 		"strictNullChecks": true,
 		"strictPropertyInitialization": true,
-		"suppressExcessPropertyErrors": false,
-		"suppressImplicitAnyIndexErrors": false,
 		"target": "ESNext",
 		"traceResolution": false,
 		"tsBuildInfoFile": "node_modules/.tsbuildinfo",
@@ -107,6 +95,19 @@
 		"types": [],
 		"useDefineForClassFields": true,
 		"useUnknownInCatchVariables": false,
-		"verbatimModuleSyntax": true
+		"verbatimModuleSyntax": true,
+
+		// INFO: TS7 breaking, can't be changed
+		"allowSyntheticDefaultImports": true,
+		"alwaysStrict": true,
+		"esModuleInterop": true
+
+		// INFO: old compat only flags, error out with oxlint
+		// "ignoreDeprecations": "6.0",
+		// "keyofStringsOnly": false,
+		// "noImplicitUseStrict": false,
+		// "noStrictGenericChecks": false,
+		// "suppressExcessPropertyErrors": false,
+		// "suppressImplicitAnyIndexErrors": false,
 	}
 }

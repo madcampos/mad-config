@@ -21,7 +21,9 @@ In your `tsconfig.json`:
 
 ```json
 {
-	"extends": "./node_modules/@mad-c/config/tsconfig.json"
+	"extends": "./node_modules/@mad-c/config/tsconfig.json",
+	"include": ["src/**/*", "src/**/*.json"],
+	"exclude": ["node_modules/**/*", "dist/**/*"],
 }
 ```
 
