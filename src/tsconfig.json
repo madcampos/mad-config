@@ -90,7 +90,7 @@
 		"strictPropertyInitialization": true,
 		"target": "ESNext",
 		"traceResolution": false,
-		"tsBuildInfoFile": "node_modules/.tsbuildinfo",
+		"tsBuildInfoFile": ".tsbuildinfo",
 		"typeRoots": [],
 		"types": [],
 		"useDefineForClassFields": true,

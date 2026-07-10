@@ -20,6 +20,7 @@ dist-ssr
 
 # Dependencies
 node_modules
+.tsbuildinfo
 
 # Wrangler local files
 .wrangler
