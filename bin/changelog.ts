@@ -15,6 +15,7 @@ import {
 	pushChanges
 } from '../src/changelog/git.ts';
 
+// #region Config
 interface ConfigHelp {
 	message: string;
 	default?: string;
@@ -107,7 +108,9 @@ const config = {
 		}
 	}
 } as const;
+// #endregion
 
+// #region Arg validation
 const { values: options } = parseArgs({ options: config });
 
 if (options.help) {
@@ -159,7 +162,9 @@ if ((options.commit && options.push)) {
 	console.error('Arguments --commit and --push aremutually exclusive');
 	process.exit(1);
 }
+// #endregion
 
+// #region Program logic
 let versionName = options.to;
 if (options.tag || options.push) {
 	const packageVersion = await getPackageVersion(options['package-json-path']);
@@ -168,6 +173,7 @@ if (options.tag || options.push) {
 		versionName = packageVersion;
 	}
 }
+
 const fromRef = getFromRef(options.from);
 const commits = getCommits(fromRef, options.to);
 const baseUrl = getBaseUrl();
@@ -178,7 +184,7 @@ const changelog = changelogFromCommits({
 	baseUrl,
 	date: changelogDate,
 	fromRef,
-	toRef: options.to,
+	toRef: versionName,
 	versionName
 });
 
