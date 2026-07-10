@@ -48,7 +48,8 @@
 		"typecheck": "tsc --noEmit",
 		"lint:js": "oxlint --fix",
 		"lint": "pnpm run typecheck && pnpm run lint:js",
-		"postversion": "node \"./src/export-changelog.ts\" --outputDir \"docs/changelog\" --push --createRelease"
+		"changelog": "node ./bin/changelog.ts",
+		"postversion": "pnpm run changelog --outputDir \"docs/changelog\" --push --createRelease"
 	},
 	"devDependencies": {
 		"@types/node": "26.1.0",

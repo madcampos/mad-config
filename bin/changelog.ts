@@ -185,7 +185,8 @@ const changelog = changelogFromCommits({
 const changelogFile = await writeChangelogFile(options.outputDir, versionName, changelog);
 
 if (!changelogFile) {
-	process.exit(0);
+	console.error('Failed to write changelog file.');
+	process.exit(1);
 }
 
 if (options.commit || options.push) {

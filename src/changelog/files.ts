@@ -6,7 +6,8 @@ import { join } from 'node:path';
 
 export async function getPackageVersion(packagePath: string) {
 	try {
-		process.permission.has('fs.read', packagePath);
+		// oxlint-disable-next-line typescript/no-unnecessary-condition
+		process.permission?.has('fs.read', packagePath);
 
 		if (!packagePath || !existsSync(packagePath)) {
 			return undefined;
@@ -26,8 +27,10 @@ export async function getPackageVersion(packagePath: string) {
 
 export async function writeChangelogFile(outputDir: string, fileName: string, changelog: string) {
 	try {
-		process.permission.has('fs.read', outputDir);
-		process.permission.has('fs.write', outputDir);
+		// oxlint-disable-next-line typescript/no-unnecessary-condition
+		process.permission?.has('fs.read', outputDir);
+		// oxlint-disable-next-line typescript/no-unnecessary-condition
+		process.permission?.has('fs.write', outputDir);
 
 		if (!existsSync(outputDir)) {
 			await mkdir(outputDir, { recursive: true });
@@ -44,7 +47,8 @@ export async function writeChangelogFile(outputDir: string, fileName: string, ch
 	try {
 		const destFile = join(outputDir, `${fileName}.md`);
 
-		process.permission.has('fs.write', destFile);
+		// oxlint-disable-next-line typescript/no-unnecessary-condition
+		process.permission?.has('fs.write', destFile);
 
 		await writeFile(destFile, changelog, 'utf-8');
 

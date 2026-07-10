@@ -7,7 +7,8 @@ function invokeGit(command: string) {
 	const gitCommand = `git ${command}`;
 
 	try {
-		process.permission.has('child', gitCommand);
+		// oxlint-disable-next-line typescript/no-unnecessary-condition
+		process.permission?.has('child', gitCommand);
 
 		return execSync(gitCommand, { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
 	} catch (err) {
@@ -80,7 +81,8 @@ export function createRelease({ versionName, notesFile }: CreateReleaseOptions) 
 	const command = `gh release create "${versionName}" --notes-file "${notesFile}" --title "${versionName}"`;
 
 	try {
-		process.permission.has('child', command);
+		// oxlint-disable-next-line typescript/no-unnecessary-condition
+		process.permission?.has('child', command);
 
 		execSync(command, { stdio: 'inherit' });
 	} catch (err) {
