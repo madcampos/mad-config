@@ -49,6 +49,7 @@
 		"lint:js": "oxlint --fix",
 		"lint": "pnpm run typecheck && pnpm run lint:js",
 		"changelog": "node ./bin/changelog.ts",
+		"version": "pnpm version --sign-git-tag --message \"chore: update package version\"",
 		"postversion": "pnpm run changelog --outputDir \"docs/changelog\" --push --createRelease"
 	},
 	"devDependencies": {
