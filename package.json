@@ -30,8 +30,8 @@
 	],
 	"type": "module",
 	"files": [
-		"src",
-		"bin"
+		"src/**/*",
+		"bin/**/*"
 	],
 	"exports": {
 		".": "./src/changelog/index.ts",
