@@ -34,10 +34,7 @@
 		"bin/**/*"
 	],
 	"exports": {
-		".": "./src/changelog/index.ts",
-		"./tsconfig.json": "./src/tsconfig.json",
-		"./dprint.json": "./src/dprint.json",
-		"./oxlintrc.json": "./src/oxlintrc.json"
+		".": "./src/changelog/index.ts"
 	},
 	"bin": {
 		"changelog": "./bin/changelog.ts"
