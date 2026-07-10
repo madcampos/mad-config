@@ -173,21 +173,21 @@ fromRef ||= invokeGit('describe --tags --abbrev=0');
 fromRef ||= invokeGit('rev-list --max-parents=0 HEAD');
 
 const sectionHeaders = {
-	build: '### Builds',
 	breaking: '### Breaking Changes',
-	chore: '### Chores & Tasks',
-	ci: '### CI',
-	docs: '### Documentation Updates',
-	examples: '### Examples',
+	revert: '### Changes Rollback',
 	feat: '### Enhancements',
 	fix: '### Fixes',
-	misc: '### Miscellaneous',
 	perf: '### Performance Improvements',
 	refactor: '### Refactors',
-	revert: '### Changes Rollback',
+	test: '### Tests',
+	docs: '### Documentation Updates',
+	examples: '### Examples',
+	build: '### Builds',
+	chore: '### Chores & Tasks',
+	ci: '### CI',
+	misc: '### Miscellaneous',
 	style: '### Stylistic Changes',
-	types: '### Type Changes',
-	test: '### Tests'
+	types: '### Type Changes'
 } as const;
 type SectionHeader = keyof typeof sectionHeaders;
 
@@ -219,6 +219,7 @@ const commits = logOutput.split('\n').filter(Boolean).map((line) => {
 	return { hash, group, message: logMessage };
 });
 
+// TODO: sort groups
 const groupedCommits = Object.groupBy(commits, ({ group }) => group);
 
 const baseUrl = invokeGit('remote get-url origin')
