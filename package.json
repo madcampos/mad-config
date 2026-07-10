@@ -43,14 +43,14 @@
 		"typecheck": "tsc --noEmit",
 		"lint:js": "oxlint --fix",
 		"lint": "pnpm run typecheck && pnpm run lint:js",
-		"postversion": "pwsh -f \"./src/Export-Changelog.ps1\" -OutputDir \"docs/changelog\" -PackagePath \"package.json\" -Push -CreateRelease"
+		"postversion": "node \"./src/export-changelog.ts\" --outputDir \"docs/changelog\" --packagePath \"package.json\" --push --createRelease"
 	},
 	"devDependencies": {
 		"@types/node": "26.1.0",
 		"dprint": "0.55.1",
-		"oxlint": "1.72.0",
+		"oxlint": "1.73.0",
 		"oxlint-tsgolint": "0.24.0",
 		"puppeteer": "25.3.0",
-		"typescript": "6.0.3"
+		"typescript": "7.0.2"
 	}
 }
