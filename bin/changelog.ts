@@ -22,7 +22,7 @@ interface ConfigHelp {
 }
 
 const config = {
-	outputDir: {
+	'output': {
 		type: 'string',
 		short: 'o',
 		help: {
@@ -31,7 +31,7 @@ const config = {
 		},
 		required: true
 	},
-	from: {
+	'from': {
 		type: 'string',
 		short: 'f',
 		help: {
@@ -40,7 +40,7 @@ const config = {
 			value: 'ref'
 		}
 	},
-	to: {
+	'to': {
 		type: 'string',
 		short: 't',
 		default: 'HEAD',
@@ -49,7 +49,7 @@ const config = {
 			value: 'ref'
 		}
 	},
-	packageJsonPath: {
+	'package-json-path': {
 		type: 'string',
 		short: 'p',
 		default: 'package.json',
@@ -58,7 +58,7 @@ const config = {
 			value: 'path'
 		}
 	},
-	commit: {
+	'commit': {
 		type: 'boolean',
 		short: 'c',
 		default: false,
@@ -66,7 +66,7 @@ const config = {
 			message: 'Commit the generated changelog.'
 		}
 	},
-	commitMessage: {
+	'message': {
 		type: 'string',
 		short: 'm',
 		default: 'chore: update changelog',
@@ -74,7 +74,7 @@ const config = {
 			message: 'Commit message to use.'
 		}
 	},
-	tag: {
+	'tag': {
 		type: 'boolean',
 		short: 'g',
 		default: false,
@@ -82,7 +82,7 @@ const config = {
 			message: 'Create a git tag for the "to" version.'
 		}
 	},
-	push: {
+	'push': {
 		type: 'boolean',
 		short: 's',
 		default: false,
@@ -90,7 +90,7 @@ const config = {
 			message: 'Commit, tag, and push changes to remote.'
 		}
 	},
-	createRelease: {
+	'create-release': {
 		type: 'boolean',
 		short: 'r',
 		default: false,
@@ -98,7 +98,7 @@ const config = {
 			message: 'Create a GitHub release using the gh CLI.'
 		}
 	},
-	help: {
+	'help': {
 		type: 'boolean',
 		short: 'h',
 		default: false,
@@ -150,7 +150,7 @@ if (options.help) {
 	// oxlint-disable no-console
 }
 
-if (!options.outputDir) {
+if (!options.output) {
 	console.error('Missing required argument: --outputDir');
 	process.exit(1);
 }
@@ -162,7 +162,7 @@ if ((options.commit && options.push)) {
 
 let versionName = options.to;
 if (options.tag || options.push) {
-	const packageVersion = await getPackageVersion(options.packageJsonPath);
+	const packageVersion = await getPackageVersion(options['package-json-path']);
 
 	if (packageVersion) {
 		versionName = packageVersion;
@@ -182,7 +182,7 @@ const changelog = changelogFromCommits({
 	versionName
 });
 
-const changelogFile = await writeChangelogFile(options.outputDir, versionName, changelog);
+const changelogFile = await writeChangelogFile(options.output, versionName, changelog);
 
 if (!changelogFile) {
 	console.error('Failed to write changelog file.');
@@ -190,7 +190,7 @@ if (!changelogFile) {
 }
 
 if (options.commit || options.push) {
-	commitChangelog(changelogFile, options.commitMessage);
+	commitChangelog(changelogFile, options.message);
 
 	if (options.tag || options.push) {
 		createGitTag(versionName);
@@ -201,7 +201,7 @@ if (options.push) {
 	pushChanges();
 }
 
-if (options.createRelease) {
+if (options['create-release']) {
 	createRelease({
 		versionName,
 		notesFile: changelogFile
