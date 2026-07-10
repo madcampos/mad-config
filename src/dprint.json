@@ -111,7 +111,6 @@
 		"mathml.selfClosing": false,
 		"svg.selfClosing": true,
 
-		"strictSvelteAttribute": true,
 		"svelte.scriptIndent": true,
 		"svelte.styleIndent": true,
 		"svelteAttrShorthand": true,

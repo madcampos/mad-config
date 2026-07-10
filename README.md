@@ -24,9 +24,17 @@ In your `tsconfig.json`:
 
 ```json
 {
-	"extends": "./node_modules/@mad-c/config/tsconfig.json",
+	"extends": "./node_modules/@mad-c/config/src/tsconfig.json",
 	"include": ["src/**/*", "src/**/*.json"],
-	"exclude": ["node_modules/**/*", "dist/**/*"]
+	"exclude": ["node_modules/**/*", "dist/**/*"],
+	"compilerOptions": {
+		// Define libs to include, by default, only "ESNext" is included.
+		"lib": ["ESNext", "DOM"],
+
+		// You have to re-add types explicitly so they can be located.
+		"typeRoots": ["./node_modules", "./node_modules/@types"],
+		"types": []
+	}
 }
 ```
 
@@ -37,7 +45,7 @@ In your `dprint.json`:
 ```json
 {
 	"$schema": "https://dprint.dev/schemas/v0.json",
-	"extends": "./node_modules/@mad-c/config/dprint.json"
+	"extends": "./node_modules/@mad-c/config/src/dprint.json"
 }
 ```
 
@@ -48,7 +56,8 @@ In your `.oxlintrc.json`:
 ```json
 {
 	"$schema": "./node_modules/oxlint/configuration_schema.json",
-	"extends": ["./node_modules/@mad-c/config/oxlint.json"]
+	"extends": ["./node_modules/@mad-c/config/src/oxlintrc.json"],
+	"ignorePatterns": ["dist/**/*", "coverage/**/*"]
 }
 ```
 
