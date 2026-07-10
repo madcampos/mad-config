@@ -18,32 +18,28 @@ const URLS = [
 	{ key: 'markup', url: 'https://dprint.dev/plugins/markup_fmt/config/' }
 ] as const;
 
-async function run() {
-	const browser = await puppeteer.launch({ headless: true });
+const browser = await puppeteer.launch({ headless: true });
 
-	try {
-		for (const { key, url } of URLS) {
-			const page = await browser.newPage();
-			await page.goto(url, { waitUntil: 'networkidle2' });
+try {
+	for (const { key, url } of URLS) {
+		const page = await browser.newPage();
+		await page.goto(url, { waitUntil: 'networkidle2' });
 
-			// oxlint-disable-next-line typescript/consistent-type-assertions
-			const configKeys = Object.keys(config[key as keyof typeof config] ?? {});
-			const configItems = await page.$$eval(SELECTOR, (elements: HTMLElement[]) => elements.map((element) => element.textContent?.trim() ?? ''));
+		// oxlint-disable-next-line typescript/consistent-type-assertions typescript/no-unnecessary-condition
+		const configKeys = Object.keys(config[key as keyof typeof config] ?? {});
+		const configItems = await page.$$eval(SELECTOR, (elements: HTMLElement[]) => elements.map((element) => element.textContent.trim()));
 
-			const missingFromConfig = configItems.filter((item) => !configKeys.includes(item));
+		const missingFromConfig = configItems.filter((item) => !configKeys.includes(item));
 
-			if (missingFromConfig.length > 0) {
-				console.log(`Found ${missingFromConfig.length} items NOT in config "${key}":`);
-				missingFromConfig.forEach((item) => console.log(` - "${item}"`));
-			}
-
-			await page.close();
+		if (missingFromConfig.length > 0) {
+			console.log(`Found ${missingFromConfig.length} items NOT in config "${key}":`);
+			missingFromConfig.forEach((item) => console.log(` - "${item}"`));
 		}
-	} catch (error) {
-		console.error('An error occurred during execution:', error);
-	} finally {
-		await browser.close();
-	}
-}
 
-run();
+		await page.close();
+	}
+} catch (error) {
+	console.error('An error occurred during execution:', error);
+} finally {
+	await browser.close();
+}
