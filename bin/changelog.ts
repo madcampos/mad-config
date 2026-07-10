@@ -1,11 +1,19 @@
 #!/usr/bin/env node
 /// <reference types="@types/node" />
 
-import { execSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
 import { type ParseArgsOptionsConfig, parseArgs, stripVTControlCharacters, styleText } from 'node:util';
+import { changelogFromCommits } from '../src/changelog/changelog.ts';
+import { getPackageVersion, writeChangelogFile } from '../src/changelog/files.ts';
+import {
+	commitChangelog,
+	createGitTag,
+	createRelease,
+	getBaseUrl,
+	getCommits,
+	getFromRef,
+	getLastCommitDate,
+	pushChanges
+} from '../src/changelog/git.ts';
 
 interface ConfigHelp {
 	message: string;
@@ -152,123 +160,49 @@ if ((options.commit && options.push)) {
 	process.exit(1);
 }
 
-function invokeGit(command: string): string {
-	try {
-		return execSync(`git ${command}`, { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
-	} catch {
-		return '';
-	}
-}
-
 let versionName = options.to;
 if (options.tag || options.push) {
-	if (options.packageJsonPath && existsSync(options.packageJsonPath)) {
-		const pkg = JSON.parse(await readFile(options.packageJsonPath, 'utf-8'));
-		versionName = `v${pkg.version}`;
+	const packageVersion = await getPackageVersion(options.packageJsonPath);
+
+	if (packageVersion) {
+		versionName = packageVersion;
 	}
 }
+const fromRef = getFromRef(options.from);
+const commits = getCommits(fromRef, options.to);
+const baseUrl = getBaseUrl();
+const changelogDate = getLastCommitDate(options.to);
 
-let fromRef = options.from ?? '';
-fromRef ||= invokeGit('describe --tags --abbrev=0');
-fromRef ||= invokeGit('rev-list --max-parents=0 HEAD');
-
-const sectionHeaders = {
-	breaking: '### Breaking Changes',
-	revert: '### Changes Rollback',
-	feat: '### Enhancements',
-	fix: '### Fixes',
-	perf: '### Performance Improvements',
-	refactor: '### Refactors',
-	test: '### Tests',
-	docs: '### Documentation Updates',
-	examples: '### Examples',
-	build: '### Builds',
-	chore: '### Chores & Tasks',
-	ci: '### CI',
-	misc: '### Miscellaneous',
-	style: '### Stylistic Changes',
-	types: '### Type Changes'
-} as const;
-type SectionHeader = keyof typeof sectionHeaders;
-
-const logOutput = invokeGit(`log ${fromRef ? `${fromRef}...` : ''}${options.to} --pretty=format:"%h%x09%s"`);
-const commits = logOutput.split('\n').filter(Boolean).map((line) => {
-	const commitRegex = /^(?<type>\w+)(?:\((?<scope>.*)\))?(?<breaking>!)?: (?<desc>.*)$/iu;
-	const [hash = '', message = ''] = line.split('\t');
-	const match = commitRegex.exec(message);
-
-	let group: SectionHeader = 'misc';
-	let logMessage = message;
-
-	if (match?.groups) {
-		const { type = 'misc', scope = '', breaking = '', desc = '' } = match.groups;
-
-		logMessage = desc;
-		if (scope) {
-			logMessage = `**${scope}**: ${desc}`;
-		}
-
-		if (breaking) {
-			group = 'breaking';
-		} else if (type in sectionHeaders) {
-			// oxlint-disable-next-line typescript/consistent-type-assertions typescript/no-unsafe-type-assertion
-			group = type as SectionHeader;
-		}
-	}
-
-	return { hash, group, message: logMessage };
+const changelog = changelogFromCommits({
+	commits,
+	baseUrl,
+	date: changelogDate,
+	fromRef,
+	toRef: options.to,
+	versionName
 });
 
-// TODO: sort groups
-const groupedCommits = Object.groupBy(commits, ({ group }) => group);
+const changelogFile = await writeChangelogFile(options.outputDir, versionName, changelog);
 
-const baseUrl = invokeGit('remote get-url origin')
-	.replace('.github.io.git', '')
-	.replace(/\.git$/iu, '');
-const changelogDate = invokeGit(`log -1 --format="%cI" "${options.to}"`);
-
-let changelog = `---
-date: ${changelogDate}
-versionName: ${versionName}
----
-
-[compare changes](${baseUrl}/compare/${fromRef}...${versionName})`;
-
-if (!existsSync(options.outputDir)) {
-	await mkdir(options.outputDir, { recursive: true });
+if (!changelogFile) {
+	process.exit(0);
 }
-
-const destFile = join(options.outputDir, `${versionName}.md`);
-
-for (const [group, items = []] of Object.entries(groupedCommits)) {
-	// oxlint-disable-next-line typescript/consistent-type-assertions typescript/no-unsafe-type-assertion
-	changelog += `\n\n${sectionHeaders[group as SectionHeader]}\n\n`;
-
-	for (const item of items) {
-		changelog += `- ${item.message} ([${item.hash}](${baseUrl}/commit/${item.hash}))\n`;
-	}
-}
-
-await writeFile(destFile, changelog, 'utf-8');
 
 if (options.commit || options.push) {
-	invokeGit(`add "${destFile}"`);
-	// Use spawnSync for commit to handle spaces in message if needed, but execSync with quotes should work
-	execSync(`git commit -m "${options.commitMessage}" --quiet`);
+	commitChangelog(changelogFile, options.commitMessage);
 
 	if (options.tag || options.push) {
-		invokeGit(`tag -a "${versionName}" -m "${versionName}"`);
+		createGitTag(versionName);
 	}
 }
 
 if (options.push) {
-	invokeGit('push --follow-tags --quiet');
+	pushChanges();
 }
 
 if (options.createRelease) {
-	try {
-		execSync(`gh release create "${versionName}" --notes-file "${destFile}" --title "${versionName}"`, { stdio: 'inherit' });
-	} catch {
-		console.warn('gh CLI not found or failed. Skipping release creation.');
-	}
+	createRelease({
+		versionName,
+		notesFile: changelogFile
+	});
 }

@@ -30,12 +30,17 @@
 	],
 	"type": "module",
 	"files": [
-		"src"
+		"src",
+		"bin"
 	],
 	"exports": {
+		".": "./src/changelog/index.ts",
 		"./tsconfig.json": "./src/tsconfig.json",
 		"./dprint.json": "./src/dprint.json",
 		"./oxlintrc.json": "./src/oxlintrc.json"
+	},
+	"bin": {
+		"changelog": "./bin/changelog.ts"
 	},
 	"scripts": {
 		"bootstrap": "pnpm exec puppeteer browsers install",
