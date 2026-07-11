@@ -37,7 +37,8 @@
 		".": "./src/changelog/index.mjs"
 	},
 	"bin": {
-		"changelog": "./bin/changelog.mjs"
+		"changelog": "./bin/changelog.mjs",
+		"init": "./bin/init.mjs"
 	},
 	"scripts": {
 		"bootstrap": "pnpm exec puppeteer browsers install",

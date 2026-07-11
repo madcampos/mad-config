@@ -1,0 +1,14 @@
+minimumReleaseAge: 10080
+minimumReleaseAgeExclude:
+# Add packages to exclude from the minimum release age
+trustPolicy: "no-downgrade"
+preferFrozenLockfile: true
+ignoreScripts: true
+ignoreDepScripts: true
+strictDepBuilds: true
+engineStrict: false
+ignorePnpmfile: true
+blockExoticSubdeps: true
+allowBuilds:
+  # Add packages to allow running build scripts
+  dprint: true
