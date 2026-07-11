@@ -45,7 +45,7 @@
 		"typecheck": "tsc --noEmit",
 		"lint:js": "oxlint --fix",
 		"lint": "pnpm run typecheck && pnpm run lint:js",
-		"changelog": "node ./bin/changelog.ts",
+		"changelog": "node ./bin/changelog.mjs",
 		"version": "pnpm version --sign-git-tag --message \"chore: update package version\"",
 		"postversion": "pnpm run changelog --output \"docs/changelog\" --push --create-release"
 	},
