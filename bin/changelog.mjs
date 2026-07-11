@@ -1,9 +1,11 @@
 #!/usr/bin/env node
+// oxlint-disable typescript/no-unsafe-type-assertion
+
 /// <reference types="@types/node" />
 
-import { type ParseArgsOptionsConfig, parseArgs, stripVTControlCharacters, styleText } from 'node:util';
-import { changelogFromCommits } from '../src/changelog/changelog.ts';
-import { getPackageVersion, writeChangelogFile } from '../src/changelog/files.ts';
+import { parseArgs, stripVTControlCharacters, styleText } from 'node:util';
+import { changelogFromCommits } from '../src/changelog/changelog.mjs';
+import { getPackageVersion, writeChangelogFile } from '../src/changelog/files.mjs';
 import {
 	commitChangelog,
 	createGitTag,
@@ -13,16 +15,25 @@ import {
 	getFromRef,
 	getLastCommitDate,
 	pushChanges
-} from '../src/changelog/git.ts';
+} from '../src/changelog/git.mjs';
 
 // #region Config
-interface ConfigHelp {
-	message: string;
-	default?: string;
-	value?: string;
-}
+/**
+ * Documentation metadata for a configuration option.
+ *
+ * @typedef {object} ConfigHelp
+ * @property {string} message - A description of what the option does.
+ * @property {string} [default] - A human-readable default value description.
+ * @property {string} [value] - The placeholder for the expected value type to display on help messages.
+ */
 
-const config = {
+/**
+ * A configuration option descriptor extending the standard Node.js parseArgs options.
+ *
+ * @typedef {import('node:util').ParseArgsOptionDescriptor & { help: ConfigHelp, required: boolean }} Config
+ */
+
+const config = /** @type {const} */ ({
 	'output': {
 		type: 'string',
 		short: 'o',
@@ -107,7 +118,7 @@ const config = {
 			message: 'Display this help message.'
 		}
 	}
-} as const;
+});
 // #endregion
 
 // #region Arg validation
@@ -122,26 +133,24 @@ if (options.help) {
 
 	console.log(styleText('bold', 'Options:'));
 
-	// oxlint-disable-next-line typescript/consistent-type-assertions typescript/no-unsafe-type-assertion
-	const optionsHelp = Object.entries(config as unknown as Record<string, ParseArgsOptionsConfig & { help: ConfigHelp }>).map(([arg, argOptions]) => {
-		// oxlint-disable typescript/no-base-to-string
-		const shortString = argOptions['short'] ? `-${argOptions['short']}, ` : '';
+	const optionsEntries = /** @type {[string, Config][]} */ (Object.entries(config));
+	const optionsHelp = optionsEntries.map(([arg, { help, short, required, default: dft }]) => {
+		const shortString = short ? `-${short}, ` : '';
 		const argString = `--${arg}`;
-		const argValue = argOptions.help.value ? ` ${styleText('cyanBright', `<${argOptions.help.value}>`)}` : '';
+		const argValue = help.value ? ` ${styleText('cyanBright', `<${help.value}>`)}` : '';
 		const argLine = `  ${shortString}${argString}${argValue} `;
 
-		const requiredHelp = argOptions['required'] ? ` ${styleText('redBright', '(required)')}` : '';
-		const defaultHelp = argOptions.help.default ?? argOptions['default']
-			? ` ${styleText('blueBright', `(default: ${argOptions.help.default ?? `"${argOptions['default']}"`})`)}`
+		const requiredHelp = required ? ` ${styleText('redBright', '(required)')}` : '';
+		const defaultHelp = help.default ?? dft
+			? ` ${styleText('blueBright', `(default: ${help.default ?? `"${dft}"`})`)}`
 			: '';
-		const argHelp = `${styleText('gray', argOptions.help.message)}${requiredHelp}${defaultHelp}`;
+		const argHelp = `${styleText('gray', help.message)}${requiredHelp}${defaultHelp}`;
 
 		return {
 			arg: argLine,
 			argLength: stripVTControlCharacters(argLine).length,
 			help: argHelp
 		};
-		// oxlint-enable typescript/no-base-to-string
 	});
 
 	const longestArg = Math.max(...optionsHelp.map(({ argLength }) => argLength));

@@ -1,16 +1,19 @@
+/**
+ * Shared utilities for generating and managing changelogs based on Git history.
+ *
+ * @module changelog
+ */
+
 export {
-	type ChangelogFromCommitsOptions,
-	type Commit,
 	changelogFromCommits
-} from './changelog.ts';
+} from './changelog.mjs';
 
 export {
 	getPackageVersion,
 	writeChangelogFile
-} from './files.ts';
+} from './files.mjs';
 
 export {
-	type CreateReleaseOptions,
 	commitChangelog,
 	createGitTag,
 	createRelease,
@@ -19,4 +22,4 @@ export {
 	getFromRef,
 	getLastCommitDate,
 	pushChanges
-} from './git.ts';
+} from './git.mjs';

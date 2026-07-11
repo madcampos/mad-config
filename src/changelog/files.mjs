@@ -4,7 +4,12 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export async function getPackageVersion(packagePath: string) {
+/**
+ * Reads the "version" field from a package.json file and returns it prefixed with 'v'.
+ *
+ * @param {string} packagePath - The absolute or relative path to the package.json file.
+ */
+export async function getPackageVersion(packagePath) {
 	try {
 		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.read', packagePath);
@@ -25,7 +30,14 @@ export async function getPackageVersion(packagePath: string) {
 	}
 }
 
-export async function writeChangelogFile(outputDir: string, fileName: string, changelog: string) {
+/**
+ * Writes the generated changelog content to a Markdown file in the specified directory.
+ *
+ * @param {string} outputDir - The directory where the changelog file should be saved.
+ * @param {string} fileName - The name of the file (without extension).
+ * @param {string} changelog - The Markdown content of the changelog.
+ */
+export async function writeChangelogFile(outputDir, fileName, changelog) {
 	try {
 		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.read', outputDir);

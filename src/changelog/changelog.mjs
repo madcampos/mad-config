@@ -16,23 +16,28 @@ const defaultSectionHeaders = {
 	types: '### Type Changes'
 };
 
-export interface Commit {
-	hash: string;
-	message: string;
-}
+/**
+ * Represents a simplified Git commit.
+ *
+ * @typedef {object} Commit
+ * @property {string} hash - The short or long commit hash.
+ * @property {string} message - The full commit message.
+ */
 
-export interface ChangelogFromCommitsOptions {
-	commits: Commit[];
-	date: string;
-	versionName: string;
-	baseUrl: string;
-	fromRef: string;
-	toRef: string;
-	sectionHeaders?: Record<string, string>;
-	miscSectionHeader?: string;
-	breakingSectionHeader?: string;
-}
-
+/**
+ * Generates a Markdown changelog string from a list of commits.
+ *
+ * @param {object} options
+ * @param {Commit[]} options.commits - The list of commits to include in the changelog.
+ * @param {string} options.date - The date string to display in the changelog frontmatter.
+ * @param {string} options.versionName - The name of the version being released.
+ * @param {string} options.baseUrl - The base repository URL for links.
+ * @param {string} options.fromRef - The starting reference (tag or hash).
+ * @param {string} options.toRef - The ending reference (tag or hash).
+ * @param {Record<string, string>} [options.sectionHeaders] - Custom headers for commit types.
+ * @param {string} [options.miscSectionHeader] - The group name for miscellaneous commits.
+ * @param {string} [options.breakingSectionHeader] - The group name for breaking changes.
+ */
 export function changelogFromCommits({
 	commits,
 	date,
@@ -43,7 +48,7 @@ export function changelogFromCommits({
 	sectionHeaders = defaultSectionHeaders,
 	miscSectionHeader = 'misc',
 	breakingSectionHeader = 'breaking'
-}: ChangelogFromCommitsOptions) {
+}) {
 	const sectionHeadersKeys = Object.keys(sectionHeaders);
 
 	const commitMessages = commits

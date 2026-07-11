@@ -34,10 +34,10 @@
 		"bin/**/*"
 	],
 	"exports": {
-		".": "./src/changelog/index.ts"
+		".": "./src/changelog/index.mjs"
 	},
 	"bin": {
-		"changelog": "./bin/changelog.ts"
+		"changelog": "./bin/changelog.mjs"
 	},
 	"scripts": {
 		"bootstrap": "pnpm exec puppeteer browsers install",
