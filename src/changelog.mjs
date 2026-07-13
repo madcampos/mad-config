@@ -6,12 +6,12 @@
 
 export {
 	changelogFromCommits
-} from './changelog.mjs';
+} from './util/changelog.mjs';
 
 export {
 	getPackageVersion,
 	writeChangelogFile
-} from './files.mjs';
+} from './util/files.mjs';
 
 export {
 	commitChangelog,
@@ -22,4 +22,4 @@ export {
 	getFromRef,
 	getLastCommitDate,
 	pushChanges
-} from './git.mjs';
+} from './util/git.mjs';

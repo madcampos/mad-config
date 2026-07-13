@@ -4,8 +4,8 @@
 /// <reference types="@types/node" />
 
 import { parseArgs, stripVTControlCharacters, styleText } from 'node:util';
-import { changelogFromCommits } from '../src/changelog/changelog.mjs';
-import { getPackageVersion, writeChangelogFile } from '../src/changelog/files.mjs';
+import { changelogFromCommits } from '../src/util/changelog.mjs';
+import { getPackageVersion, writeChangelogFile } from '../src/util/files.mjs';
 import {
 	commitChangelog,
 	createGitTag,
@@ -15,7 +15,7 @@ import {
 	getFromRef,
 	getLastCommitDate,
 	pushChanges
-} from '../src/changelog/git.mjs';
+} from '../src/util/git.mjs';
 
 // #region Config
 /**
