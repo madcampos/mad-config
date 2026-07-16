@@ -109,7 +109,7 @@
 		"no-inline-comments": [
 			"warn",
 			{
-				"ignorePattern": "(?:^\\s*(?:sql|html|xml|css|db|svg|glsl|inline-html|template|inline-template|javascript|js|typescript|ts)\\s*$)|(?:(?:@vite-ignore|@ts-expect-error|eslint|oxlint).+)"
+				"ignorePattern": "(?:^\\s*(?:sql|html|xml|css|db|svg|glsl|inline-html|template|inline-template|javascript|js|typescript|ts)\\s*$)|(?:(?:@type|@vite-ignore|@ts-expect-error|eslint|oxlint).+)"
 			}
 		],
 		"no-inner-declarations": ["error", "both"],
@@ -341,7 +341,7 @@
 		"typescript/no-unnecessary-type-assertion": "error",
 		"typescript/no-unnecessary-type-constraint": "error",
 		"typescript/no-unnecessary-type-conversion": "error",
-		"typescript/no-unnecessary-type-parameters": "error",
+		"typescript/no-unnecessary-type-parameters": "off",
 		"typescript/no-unsafe-argument": "off",
 		"typescript/no-unsafe-assignment": "off",
 		"typescript/no-unsafe-call": "off",

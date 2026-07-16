@@ -134,3 +134,10 @@ export function createRelease({ versionName, notesFile }) {
 		console.warn('gh CLI not found or failed. Skipping release creation.');
 	}
 }
+
+/**
+ * Init a git repository.
+ */
+export function initGit() {
+	invokeGit('init');
+}

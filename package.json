@@ -34,9 +34,7 @@
 		"bin/**/*"
 	],
 	"exports": {
-		"./changelog": "./src/changelog.mjs",
-		"./init": "./src/init.mjs",
-		"./update": "./src/update.mjs"
+		".": "./src/index.mjs"
 	},
 	"bin": {
 		"changelog": "./bin/changelog.mjs",

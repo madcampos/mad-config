@@ -1,6 +1,7 @@
 minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
-# Add packages to exclude from the minimum release age
+  # Add packages to exclude from the minimum release age
+  - "@mad-c/config"
 trustPolicy: "no-downgrade"
 preferFrozenLockfile: true
 ignoreScripts: true
