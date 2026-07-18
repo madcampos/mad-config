@@ -2,7 +2,7 @@
 
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 
 /**
  * @typedef {Object} PackageJson
@@ -153,7 +153,8 @@ export async function writeChangelogFile(outputDir, fileName, changelog) {
  */
 export async function readTemplateFile(fileName) {
 	try {
-		const sourcePath = import.meta.resolve(fileName, '../templates/');
+		const templatesDir = resolve(import.meta.dirname, '../templates/');
+		const sourcePath = join(templatesDir, fileName);
 
 		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.read', sourcePath);
@@ -173,10 +174,15 @@ export async function readTemplateFile(fileName) {
 /**
  * @param {string} fileName
  * @param {string} destPath
+ * @param {Record<string, string>} [data]
  */
-export async function copyTemplateFile(fileName, destPath) {
+export async function copyTemplateFile(fileName, destPath, data = {}) {
 	try {
-		const contents = await readTemplateFile(fileName);
+		let contents = await readTemplateFile(fileName);
+
+		Object.entries(data).forEach(([key, value]) => {
+			contents = contents.replaceAll(`{{${key}}}`, value);
+		});
 
 		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.write', destPath);

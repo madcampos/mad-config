@@ -13,7 +13,7 @@ export function installDependencies(isDev = false, ...dependencies) {
 		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('child', installCommand);
 
-		return execSync(installCommand, { encoding: 'utf-8', stdio: 'inherit' }).trim();
+		return execSync(installCommand, { encoding: 'utf-8', stdio: ['ignore', 'ignore', 'pipe'] });
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
 			console.error('Permission to spawn child processes is required.');
@@ -33,7 +33,7 @@ export function initRepo() {
 		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('child', installCommand);
 
-		return execSync(installCommand, { encoding: 'utf-8', stdio: 'inherit' }).trim();
+		return execSync(installCommand, { encoding: 'utf-8', stdio: ['ignore', 'ignore', 'pipe'] });
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
 			console.error('Permission to spawn child processes is required.');
@@ -56,7 +56,7 @@ export function execDependency(dependency, ...params) {
 		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('child', command);
 
-		return execSync(command, { encoding: 'utf-8', stdio: 'inherit' }).trim();
+		return execSync(command, { encoding: 'utf-8', stdio: 'inherit' });
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
 			console.error('Permission to spawn child processes is required.');

@@ -1,9 +1,10 @@
 // eslint-env node
 
+/// <reference types="@types/node" />
 /// <reference types="vite/client" />
 
 import { readFileSync } from 'node:fs';
-import { type UserConfig } from 'vite';
+import { defineConfig, type UserConfig } from 'vite';
 
 // oxlint-disable-next-line import/no-default-export
 export default defineConfig(({ mode }) => {
