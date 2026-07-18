@@ -149,6 +149,8 @@ export async function writeChangelogFile(outputDir, fileName, changelog) {
 }
 
 /**
+ * Reads a template file from the templates directory.
+ *
  * @param {string} fileName
  */
 export async function readTemplateFile(fileName) {
@@ -172,6 +174,8 @@ export async function readTemplateFile(fileName) {
 }
 
 /**
+ * Copies a template file to a destination path, optionally replacing placeholders with data.
+ *
  * @param {string} fileName
  * @param {string} destPath
  * @param {Record<string, string>} [data]
@@ -202,6 +206,8 @@ export async function copyTemplateFile(fileName, destPath, data = {}) {
 }
 
 /**
+ * Writes text content to a file, creating the directory if it doesn't exist.
+ *
  * @param {string} destPath
  * @param {string} contents
  */
@@ -225,6 +231,8 @@ export async function writeTextFile(destPath, contents) {
 }
 
 /**
+ * Creates a directory recursively.
+ *
  * @param {string} destPath
  */
 export async function createDir(destPath) {

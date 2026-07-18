@@ -64,6 +64,9 @@ export function getCommits(fromRef, toRef) {
 	return commits;
 }
 
+/**
+ * Retrieves the base URL of the `origin` remote, removing `.git` suffixes.
+ */
 export function getBaseUrl() {
 	const baseUrl = invokeGit('remote get-url origin')
 		.replace('.github.io.git', '')

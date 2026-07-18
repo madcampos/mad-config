@@ -36,3 +36,9 @@ export {
 	initRepo,
 	installDependencies
 } from './util/dependencies.mjs';
+
+export {
+	cleanup,
+	confirm,
+	prompt
+} from './util/readline.mjs';

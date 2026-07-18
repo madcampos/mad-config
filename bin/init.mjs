@@ -3,12 +3,11 @@
 
 /// <reference types="@types/node" />
 
-import { stdin, stdout } from 'node:process';
-import { createInterface } from 'node:readline/promises';
 import { parseArgs, styleText } from 'node:util';
 import { execDependency, initRepo, installDependencies } from '../src/util/dependencies.mjs';
 import { copyTemplateFile, readPackageJson, updatePackageJson, writeTextFile } from '../src/util/files.mjs';
 import { initGit } from '../src/util/git.mjs';
+import { cleanup, confirm, prompt } from '../src/util/readline.mjs';
 
 const { values: options } = parseArgs({
 	options: {
@@ -16,35 +15,8 @@ const { values: options } = parseArgs({
 	}
 });
 
-const readLine = createInterface({ input: stdin, output: stdout });
-
-/**
- * @param {string} question
- */
-async function confirm(question) {
-	if (options.yes) {
-		return true;
-	}
-
-	const answer = await readLine.question(`${question} (y/N): `);
-
-	return answer.toLowerCase() === 'y';
-}
-
-/**
- * @param {string} question
- */
-async function prompt(question) {
-	if (options.yes) {
-		return '';
-	}
-
-	const answer = await readLine.question(`${question} `);
-
-	return answer;
-}
-
 try {
+	// #region Init
 	console.log(styleText('cyan', 'Initializing project'));
 
 	console.log(styleText('cyan', 'git Initializing git'));
@@ -52,7 +24,9 @@ try {
 
 	console.log(styleText('cyan', 'Running npm init'));
 	initRepo();
+	// #endregion
 
+	// #region Dependencies
 	console.log(styleText('cyan', 'Adding pnpm-workspace.yaml'));
 	await copyTemplateFile('pnpm-workspace.yaml', './pnpm-workspace.yaml');
 
@@ -71,7 +45,9 @@ try {
 		'postversion': 'changelog --output "docs/changelog" --push --create-release'
 	};
 	await updatePackageJson({ scripts: packageJson.scripts });
+	// #endregion
 
+	// #region Files
 	console.log(styleText('cyan', 'Creating src folder'));
 	await writeTextFile('src/index.ts', '// TODO: entry point');
 
@@ -93,7 +69,7 @@ try {
 	console.log(styleText('cyan', 'Adding typescript config'));
 	await copyTemplateFile('tsconfig.json', 'tsconfig.json');
 
-	const license = await prompt('What license would you like to add? [mit/lgpl/other]');
+	const license = await prompt('What license would you like to add? [mit/lgpl/other]', options.yes);
 	switch (license) {
 		case 'mit':
 			console.log(styleText('cyan', 'Saving licence file'));
@@ -107,8 +83,10 @@ try {
 			break;
 		default:
 	}
+	// #endregion
 
-	if (await confirm('Do you want to add certificates?')) {
+	// #region Certificates
+	if (await confirm('Do you want to add certificates?', options.yes)) {
 		console.log(styleText('cyan', 'Adding mkcert script'));
 
 		console.log(styleText('cyan', 'Updating package.json scripts'));
@@ -121,22 +99,26 @@ try {
 		console.log(styleText('cyan', 'Adding certs folder'));
 		await writeTextFile('certs/.gitkeep', '');
 	}
+	// #endregion
 
-	if (await confirm('Do you want to add env vars?')) {
+	// #region Env vars
+	if (await confirm('Do you want to add env vars?', options.yes)) {
 		console.log(styleText('cyan', 'Installing varlock'));
 		installDependencies(true, 'varlock');
 
 		console.log(styleText('cyan', 'Copying env schema'));
 		await copyTemplateFile('.env.schema', '.env.schema');
 	}
+	// #endregion
 
-	if (await confirm('Do you want to add wrangler?')) {
+	// #region Wrangler
+	if (await confirm('Do you want to add wrangler?', options.yes)) {
 		console.log(styleText('cyan', 'Installing dependencies'));
 		installDependencies(true, 'wrangler');
 
 		console.log(styleText('cyan', 'Initializing wrangler.json'));
-		const workerName = packageJson.name ?? await prompt('What is the worker name?');
-		const workerDomain = await prompt('What is the domain name?');
+		const workerName = packageJson.name ?? await prompt('What is the worker name?', options.yes);
+		const workerDomain = await prompt('What is the domain name?', options.yes);
 		await copyTemplateFile('wrangler.json', 'wrangler.json', {
 			name: workerName,
 			domain: workerDomain
@@ -156,8 +138,10 @@ try {
 		console.log(styleText('cyan', 'Create public dir'));
 		await writeTextFile('./public/.gitkeep', '');
 	}
+	// #endregion
 
-	if (await confirm('Do you want to add vite?')) {
+	// #region Vite/Vitest
+	if (await confirm('Do you want to add vite?', options.yes)) {
 		console.log(styleText('cyan', 'Installing dependencies'));
 		installDependencies(true, 'vite', '@types/node');
 		// oxlint-disable-next-line no-magic-numbers
@@ -177,7 +161,7 @@ try {
 		};
 		await updatePackageJson({ scripts: packageJson.scripts });
 
-		if (await confirm('Do you want to add vitest?')) {
+		if (await confirm('Do you want to add vitest?', options.yes)) {
 			console.log(styleText('cyan', 'Installing dependencies'));
 			installDependencies(true, 'vitest', '@vitest/coverage-v8', '@vitest/browser-playwright');
 			await copyTemplateFile('vitest.config.template', './vitest.config.ts');
@@ -192,10 +176,11 @@ try {
 			execDependency('playwright', 'install', 'chromium');
 		}
 	}
+	// #endregion
 
 	console.log(styleText('cyan', 'Initialization complete!'));
 } catch (error) {
 	console.error('Error during initialization:', error);
 } finally {
-	readLine.close();
+	cleanup();
 }
