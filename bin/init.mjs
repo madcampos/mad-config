@@ -5,10 +5,16 @@
 
 import { stdin, stdout } from 'node:process';
 import { createInterface } from 'node:readline/promises';
-import { styleText } from 'node:util';
+import { parseArgs, styleText } from 'node:util';
 import { execDependency, initRepo, installDependencies } from '../src/util/dependencies.mjs';
 import { copyTemplateFile, readPackageJson, updatePackageJson, writeTextFile } from '../src/util/files.mjs';
 import { initGit } from '../src/util/git.mjs';
+
+const { values: options } = parseArgs({
+	options: {
+		yes: { type: 'boolean', short: 'y' }
+	}
+});
 
 const readLine = createInterface({ input: stdin, output: stdout });
 
@@ -16,6 +22,10 @@ const readLine = createInterface({ input: stdin, output: stdout });
  * @param {string} question
  */
 async function confirm(question) {
+	if (options.yes) {
+		return true;
+	}
+
 	const answer = await readLine.question(`${question} (y/N): `);
 
 	return answer.toLowerCase() === 'y';
@@ -25,6 +35,10 @@ async function confirm(question) {
  * @param {string} question
  */
 async function prompt(question) {
+	if (options.yes) {
+		return '';
+	}
+
 	const answer = await readLine.question(`${question} `);
 
 	return answer;
