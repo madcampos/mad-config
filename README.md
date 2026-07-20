@@ -6,6 +6,7 @@ Shared configurations for the following tools:
 - [dprint](https://dprint.dev/)
 - [oxlint](https://oxc.rs/docs/guide/usage/linter)
 - Changelog CLI tool to write and update changelogs
+- Init script to bootstrap new projects
 
 > [!NOTE]
 > All the configurations files set all available configurations for that tool.
@@ -66,3 +67,10 @@ In your `.oxlintrc.json`:
 This is a small CLI tool to get the latest commits from the repository and output a markdown changelog file.
 
 Full docs are available as [docs/changelog.md](./docs/changelog.md).
+
+## Init
+
+This script initializes a new project with standard configurations and dependencies.
+
+Full docs are available as [docs/init.md](./docs/init.md).
+
