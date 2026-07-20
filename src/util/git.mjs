@@ -18,6 +18,8 @@ function invokeGit(command) {
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
 			console.error('Permission to spawn child processes is required.');
+		} else {
+			console.error(err);
 		}
 
 		return '';
@@ -34,8 +36,18 @@ function invokeGit(command) {
 export function getFromRef(latestVersion, originalFromRef) {
 	let fromRef = originalFromRef ?? '';
 
-	const latestGitVersion = invokeGit('describe --tags --abbrev=0');
-	fromRef ||= latestVersion === latestGitVersion ? invokeGit(`describe --tags --abbrev=0 ${latestGitVersion}^`) : latestGitVersion;
+	if (!fromRef) {
+		const latestGitVersion = invokeGit(`describe --tags --abbrev=0 "${latestVersion}^"`);
+		const isLatestHead = latestVersion === 'HEAD';
+		const doesLatestVersionMatchGit = latestVersion === latestGitVersion;
+
+		if (isLatestHead || doesLatestVersionMatchGit) {
+			fromRef = invokeGit(`describe --tags --abbrev=0 "${latestGitVersion}^"`);
+		} else {
+			fromRef = latestGitVersion;
+		}
+	}
+
 	fromRef ||= invokeGit('rev-list --max-parents=0 HEAD');
 
 	return fromRef;

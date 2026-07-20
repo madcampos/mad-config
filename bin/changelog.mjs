@@ -175,18 +175,16 @@ if ((options.commit && options.push)) {
 
 // #region Program logic
 let versionName = options.to;
-if (options.tag || options.push) {
-	const packageVersion = await getPackageVersion(options['package-json-path']);
+const packageVersion = await getPackageVersion(options['package-json-path']);
 
-	if (packageVersion) {
-		versionName = packageVersion;
-	}
+if (packageVersion) {
+	versionName = packageVersion;
 }
 
 const fromRef = getFromRef(versionName, options.from);
-const commits = getCommits(fromRef, options.to);
+const commits = getCommits(fromRef, versionName);
 const baseUrl = getBaseUrl();
-const changelogDate = getLastCommitDate(options.to);
+const changelogDate = getLastCommitDate(versionName);
 
 const changelog = changelogFromCommits({
 	commits,
