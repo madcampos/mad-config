@@ -28,11 +28,14 @@ function invokeGit(command) {
  * Resolves the starting Git reference for the changelog.
  * Defaults to the latest tag, or the first commit if no tags exist.
  *
+ * @param {string} [latestVersion] - The latest version.
  * @param {string} [originalFromRef] - An optional explicit reference to start from.
  */
-export function getFromRef(originalFromRef) {
+export function getFromRef(latestVersion, originalFromRef) {
 	let fromRef = originalFromRef ?? '';
-	fromRef ||= invokeGit('describe --tags --abbrev=0');
+
+	const latestGitVersion = invokeGit('describe --tags --abbrev=0');
+	fromRef ||= latestVersion === latestGitVersion ? invokeGit(`describe --tags --abbrev=0 ${latestGitVersion}^`) : latestGitVersion;
 	fromRef ||= invokeGit('rev-list --max-parents=0 HEAD');
 
 	return fromRef;

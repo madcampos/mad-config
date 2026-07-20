@@ -183,7 +183,7 @@ if (options.tag || options.push) {
 	}
 }
 
-const fromRef = getFromRef(options.from);
+const fromRef = getFromRef(versionName, options.from);
 const commits = getCommits(fromRef, options.to);
 const baseUrl = getBaseUrl();
 const changelogDate = getLastCommitDate(options.to);
