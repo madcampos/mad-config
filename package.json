@@ -1,6 +1,6 @@
 {
 	"name": "@mad-c/config",
-	"version": "2.3.0",
+	"version": "3.0.0",
 	"description": "Shared config for different projects",
 	"keywords": [
 		"shared config"
