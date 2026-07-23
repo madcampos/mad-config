@@ -44,6 +44,25 @@ export function initRepo() {
 }
 
 /**
+ * Updates dependencies using `pnpm`.
+ */
+export function updateDependencies() {
+	const command = `pnpm update`;
+
+	try {
+		process.permission?.has('child', command);
+
+		return execSync(command, { encoding: 'utf-8', stdio: ['ignore', 'ignore', 'pipe'] });
+	} catch (err) {
+		if (err?.code === 'ERR_ACCESS_DENIED') {
+			console.error('Permission to spawn child processes is required.');
+		}
+
+		throw err;
+	}
+}
+
+/**
  * Execute a dependency using `pnpm exec`.
  *
  * @param {string} dependency

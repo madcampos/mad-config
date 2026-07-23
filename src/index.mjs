@@ -34,7 +34,8 @@ export {
 export {
 	execDependency,
 	initRepo,
-	installDependencies
+	installDependencies,
+	updateDependencies
 } from './util/dependencies.mjs';
 
 export {

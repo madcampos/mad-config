@@ -6,8 +6,19 @@
 import { parseArgs, styleText } from 'node:util';
 import { cleanup, confirm, prompt, showHelp } from '../src/util/cli.mjs';
 import { execDependency, initRepo, installDependencies } from '../src/util/dependencies.mjs';
-import { copyTemplateFile, readPackageJson, updatePackageJson, writeTextFile } from '../src/util/files.mjs';
+import { copyTemplateFile, readPackageJson, readTemplateFile, updatePackageJson, writeTextFile } from '../src/util/files.mjs';
 import { initGit } from '../src/util/git.mjs';
+
+/**
+ * @typedef {object} PackageJsonTemplate
+ * @property {Record<string, string>} engines
+ * @property {object} templateScripts
+ * @property {Record<string, string>} templateScripts.default
+ * @property {Record<string, string>} templateScripts.certs
+ * @property {Record<string, string>} templateScripts.wrangler
+ * @property {Record<string, string>} templateScripts.vite
+ * @property {Record<string, string>} templateScripts.vitest
+ */
 
 // #region Config
 const config = /** @type {const} */ ({
@@ -54,20 +65,22 @@ try {
 	await copyTemplateFile('pnpm-workspace.yaml', './pnpm-workspace.yaml');
 
 	const packageJson = await readPackageJson();
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
+	const packageJsonTemplate = /** @type {PackageJsonTemplate} */ (JSON.parse(await readTemplateFile('package.json')));
 
 	console.log(styleText('cyan', 'Installing dependencies'));
 	installDependencies(true, 'dprint', 'typescript', 'oxlint', '@mad-c/config');
 
 	console.log(styleText('cyan', 'Updating package.json scripts'));
-	packageJson.scripts = {
-		'typecheck': 'tsc --noEmit',
-		'lint:js': 'oxlint --fix',
-		'lint': 'npm run typecheck && npm run lint:js',
-		'format': 'dprint fmt',
-		'version': 'npm version --sign-git-tag --message "chore: update package version"',
-		'postversion': 'changelog --output "docs/changelog" --push --create-release'
-	};
-	await updatePackageJson({ scripts: packageJson.scripts });
+	packageJson.scripts = packageJsonTemplate.templateScripts.default;
+
+	console.log(styleText('cyan', 'Updating package.json engines'));
+	packageJson.engines = packageJsonTemplate.engines;
+
+	await updatePackageJson({
+		scripts: packageJson.scripts,
+		engines: packageJson.engines
+	});
 	// #endregion
 
 	// #region Files
@@ -115,7 +128,7 @@ try {
 		console.log(styleText('cyan', 'Updating package.json scripts'));
 		packageJson.scripts = {
 			...packageJson.scripts,
-			certs: 'mkcert -install && mkcert -key-file=certs/server.key -cert-file=certs/server.crt localhost'
+			...packageJsonTemplate.templateScripts.certs
 		};
 		await updatePackageJson({ scripts: packageJson.scripts });
 
@@ -153,8 +166,7 @@ try {
 		console.log(styleText('cyan', 'Updating package.json scripts'));
 		packageJson.scripts = {
 			...packageJson.scripts,
-			types: 'wrangler types server/env.d.ts',
-			deploy: 'wrangler deploy --minify --env=""'
+			...packageJsonTemplate.templateScripts.wrangler
 		};
 		await updatePackageJson({ scripts: packageJson.scripts });
 
@@ -177,10 +189,7 @@ try {
 		console.log(styleText('cyan', 'Updating package.json scripts'));
 		packageJson.scripts = {
 			...packageJson.scripts,
-			start: 'vite',
-			prepreview: 'pnpm run build',
-			preview: 'vite preview',
-			build: 'vite build'
+			...packageJsonTemplate.templateScripts.vite
 		};
 		await updatePackageJson({ scripts: packageJson.scripts });
 
@@ -192,8 +201,7 @@ try {
 			console.log(styleText('cyan', 'Updating package.json scripts'));
 			packageJson.scripts = {
 				...packageJson.scripts,
-				browsers: 'playwright install chromium',
-				test: 'vitest'
+				...packageJsonTemplate.templateScripts.vitest
 			};
 			await updatePackageJson({ scripts: packageJson.scripts });
 			execDependency('playwright', 'install', 'chromium');

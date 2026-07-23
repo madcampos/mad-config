@@ -5,11 +5,15 @@
 	"keywords": [
 		"shared config"
 	],
+	"engines": {
+		"node": ">=26.4.0",
+		"pnpm": ">=11.11.0"
+	},
 	"author": {
 		"name": "madcampos",
 		"url": "https://madcampos.dev/"
 	},
-	"license": "LGPL-2.1-or-later",
+	"license": "LGPL-3",
 	"homepage": "https://github.com/madcampos/mad-config#readme",
 	"bugs": {
 		"url": "https://github.com/madcampos/mad-config/issues"
@@ -38,7 +42,8 @@
 	},
 	"bin": {
 		"changelog": "./bin/changelog.mjs",
-		"init": "./bin/init.mjs"
+		"init": "./bin/init.mjs",
+		"update": "./bin/update.mjs"
 	},
 	"scripts": {
 		"bootstrap": "pnpm exec puppeteer browsers install",
@@ -47,6 +52,7 @@
 		"lint:js": "oxlint --fix",
 		"lint": "pnpm run typecheck && pnpm run lint:js",
 		"changelog": "node ./bin/changelog.mjs",
+		"update": "node ./bin/update.mjs",
 		"version": "pnpm version --sign-git-tag --message \"chore: update package version\"",
 		"postversion": "pnpm run changelog --output \"docs/changelog\" --push --create-release"
 	},
