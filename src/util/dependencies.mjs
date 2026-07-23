@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-unnecessary-condition
+
 import { execSync } from 'node:child_process';
 
 /**
@@ -10,7 +12,6 @@ export function installDependencies(isDev = false, ...dependencies) {
 	const installCommand = `pnpm install${isDev ? ' --save-dev' : ''} ${dependencies.join(' ')}`;
 
 	try {
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('child', installCommand);
 
 		return execSync(installCommand, { encoding: 'utf-8', stdio: ['ignore', 'ignore', 'pipe'] });
@@ -30,7 +31,6 @@ export function initRepo() {
 	const installCommand = `pnpm init -y`;
 
 	try {
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('child', installCommand);
 
 		return execSync(installCommand, { encoding: 'utf-8', stdio: ['ignore', 'ignore', 'pipe'] });
@@ -53,7 +53,6 @@ export function execDependency(dependency, ...params) {
 	const command = `pnpm dlx ${dependency}${params.length ? ` ${params.join(' ')}` : ''}`;
 
 	try {
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('child', command);
 
 		return execSync(command, { encoding: 'utf-8', stdio: 'inherit' });

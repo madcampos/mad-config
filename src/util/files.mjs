@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-unnecessary-condition
+
 /// <reference types="@types/node" />
 
 import { existsSync } from 'node:fs';
@@ -28,7 +30,6 @@ import { dirname, join, resolve } from 'node:path';
  */
 export async function readPackageJson(packagePath = 'package.json') {
 	try {
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.read', packagePath);
 
 		if (!packagePath || !existsSync(packagePath)) {
@@ -57,7 +58,6 @@ export async function readPackageJson(packagePath = 'package.json') {
  */
 export async function updatePackageJson(newContent, packagePath = 'package.json') {
 	try {
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.read', packagePath);
 
 		if (!packagePath || !existsSync(packagePath)) {
@@ -73,7 +73,6 @@ export async function updatePackageJson(newContent, packagePath = 'package.json'
 			...newContent
 		};
 
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.write', packagePath);
 
 		await writeFile(packagePath, `${JSON.stringify(updatedContent, null, '\t')}\n`, 'utf-8');
@@ -112,9 +111,7 @@ export async function getPackageVersion(packagePath = 'package.json') {
  */
 export async function writeChangelogFile(outputDir, fileName, changelog) {
 	try {
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.read', outputDir);
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.write', outputDir);
 
 		if (!existsSync(outputDir)) {
@@ -132,7 +129,6 @@ export async function writeChangelogFile(outputDir, fileName, changelog) {
 	try {
 		const destFile = join(outputDir, `${fileName}.md`);
 
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.write', destFile);
 
 		await writeFile(destFile, changelog, 'utf-8');
@@ -158,7 +154,6 @@ export async function readTemplateFile(fileName) {
 		const templatesDir = resolve(import.meta.dirname, '../templates/');
 		const sourcePath = join(templatesDir, fileName);
 
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.read', sourcePath);
 
 		const contents = await readFile(sourcePath, { encoding: 'utf-8' });
@@ -188,7 +183,6 @@ export async function copyTemplateFile(fileName, destPath, data = {}) {
 			contents = contents.replaceAll(`{{${key}}}`, value);
 		});
 
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.write', destPath);
 
 		const dir = dirname(destPath);
@@ -213,7 +207,6 @@ export async function copyTemplateFile(fileName, destPath, data = {}) {
  */
 export async function writeTextFile(destPath, contents) {
 	try {
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.write', destPath);
 
 		const dir = dirname(destPath);
@@ -237,7 +230,6 @@ export async function writeTextFile(destPath, contents) {
  */
 export async function createDir(destPath) {
 	try {
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('fs.write', destPath);
 
 		await mkdir(destPath, { recursive: true });

@@ -40,5 +40,6 @@ export {
 export {
 	cleanup,
 	confirm,
-	prompt
-} from './util/readline.mjs';
+	prompt,
+	showHelp
+} from './util/cli.mjs';

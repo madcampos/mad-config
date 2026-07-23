@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// oxlint-disable typescript/no-unsafe-type-assertion
 
 /// <reference types="@types/node" />
 
-import { parseArgs, stripVTControlCharacters, styleText } from 'node:util';
+import { parseArgs } from 'node:util';
 import { changelogFromCommits } from '../src/util/changelog.mjs';
+import { showHelp } from '../src/util/cli.mjs';
 import { getPackageVersion, writeChangelogFile } from '../src/util/files.mjs';
 import {
 	commitChangelog,
@@ -18,21 +18,6 @@ import {
 } from '../src/util/git.mjs';
 
 // #region Config
-/**
- * Documentation metadata for a configuration option.
- *
- * @typedef {object} ConfigHelp
- * @property {string} message - A description of what the option does.
- * @property {string} [default] - A human-readable default value description.
- * @property {string} [value] - The placeholder for the expected value type to display on help messages.
- */
-
-/**
- * A configuration option descriptor extending the standard Node.js parseArgs options.
- *
- * @typedef {import('node:util').ParseArgsOptionDescriptor & { help: ConfigHelp, required: boolean }} Config
- */
-
 const config = /** @type {const} */ ({
 	'output': {
 		type: 'string',
@@ -125,41 +110,7 @@ const config = /** @type {const} */ ({
 const { values: options } = parseArgs({ options: config });
 
 if (options.help) {
-	// oxlint-disable no-console
-	console.log('Generates a Markdown changelog from Git history.\n');
-
-	console.log(styleText('bold', 'Usage:'));
-	console.log('  $ changelog [options]\n');
-
-	console.log(styleText('bold', 'Options:'));
-
-	const optionsEntries = /** @type {[string, Config][]} */ (Object.entries(config));
-	const optionsHelp = optionsEntries.map(([arg, { help, short, required, default: dft }]) => {
-		const shortString = short ? `-${short}, ` : '';
-		const argString = `--${arg}`;
-		const argValue = help.value ? ` ${styleText('cyanBright', `<${help.value}>`)}` : '';
-		const argLine = `  ${shortString}${argString}${argValue} `;
-
-		const requiredHelp = required ? ` ${styleText('redBright', '(required)')}` : '';
-		const defaultHelp = help.default ?? dft
-			? ` ${styleText('blueBright', `(default: ${help.default ?? `"${dft}"`})`)}`
-			: '';
-		const argHelp = `${styleText('gray', help.message)}${requiredHelp}${defaultHelp}`;
-
-		return {
-			arg: argLine,
-			argLength: stripVTControlCharacters(argLine).length,
-			help: argHelp
-		};
-	});
-
-	const longestArg = Math.max(...optionsHelp.map(({ argLength }) => argLength));
-	optionsHelp.forEach(({ arg, argLength, help }) => {
-		console.log(`${arg}${''.padEnd(longestArg - argLength, ' ')} ${help}`);
-	});
-
-	process.exit(0);
-	// oxlint-disable no-console
+	showHelp('changelog', 'Generates a Markdown changelog from Git history.', config);
 }
 
 if (!options.output) {

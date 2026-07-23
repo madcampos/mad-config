@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-unnecessary-condition
+
 /// <reference types="@types/node" />
 
 import { execSync } from 'node:child_process';
@@ -11,7 +13,6 @@ function invokeGit(command) {
 	const gitCommand = `git ${command}`;
 
 	try {
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('child', gitCommand);
 
 		return execSync(gitCommand, { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
@@ -138,7 +139,6 @@ export function createRelease({ versionName, notesFile }) {
 	const command = `gh release create "${versionName}" --notes-file "${notesFile}" --title "${versionName}"`;
 
 	try {
-		// oxlint-disable-next-line typescript/no-unnecessary-condition
 		process.permission?.has('child', command);
 
 		execSync(command, { stdio: 'inherit' });

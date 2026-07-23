@@ -4,16 +4,39 @@
 /// <reference types="@types/node" />
 
 import { parseArgs, styleText } from 'node:util';
+import { cleanup, confirm, prompt, showHelp } from '../src/util/cli.mjs';
 import { execDependency, initRepo, installDependencies } from '../src/util/dependencies.mjs';
 import { copyTemplateFile, readPackageJson, updatePackageJson, writeTextFile } from '../src/util/files.mjs';
 import { initGit } from '../src/util/git.mjs';
-import { cleanup, confirm, prompt } from '../src/util/readline.mjs';
 
-const { values: options } = parseArgs({
-	options: {
-		yes: { type: 'boolean', short: 'y' }
+// #region Config
+const config = /** @type {const} */ ({
+	yes: {
+		type: 'boolean',
+		short: 'y',
+		default: false,
+		help: {
+			message: 'Skip confirmation prompts'
+		}
+	},
+	help: {
+		type: 'boolean',
+		short: 'h',
+		default: false,
+		help: {
+			message: 'Display this help message.'
+		}
 	}
 });
+// #endregion
+
+// #region Arg Validation
+const { values: options } = parseArgs({ options: config });
+
+if (options.help) {
+	showHelp('init', 'Init a repository with default configuration.', config);
+}
+// #endregion
 
 try {
 	// #region Init
