@@ -33,7 +33,7 @@ export async function confirm(question, force = false) {
 
 	const answer = await readLine.question(`${question} (y/N): `);
 
-	return answer.toLowerCase() === 'y';
+	return answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes';
 }
 
 /**
