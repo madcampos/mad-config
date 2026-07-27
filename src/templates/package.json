@@ -10,7 +10,8 @@
 			"lint": "npm run typecheck && npm run lint:js",
 			"format": "dprint fmt",
 			"version": "npm version --sign-git-tag --message \"chore: update package version\"",
-			"postversion": "changelog --output \"docs/changelog\" --push --create-release"
+			"postversion": "changelog --output \"docs/changelog\" --push --create-release",
+			"update": "update"
 		},
 		"certs": {
 			"certs": "mkcert -install && mkcert -key-file=certs/server.key -cert-file=certs/server.crt localhost"
