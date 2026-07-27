@@ -109,7 +109,7 @@
 		"no-inline-comments": [
 			"warn",
 			{
-				"ignorePattern": "(?:^\\s*(?:sql|html|xml|css|db|svg|glsl|inline-html|template|inline-template|javascript|js|typescript|ts)\\s*$)|(?:(?:@type|@vite-ignore|@ts-expect-error|eslint|oxlint).+)"
+				"ignorePattern": "(?:^\\s*(?:md|sql|html|xml|css|db|svg|glsl|inline-html|template|inline-template|javascript|js|typescript|ts)\\s*$)|(?:(?:@type|@vite-ignore|@ts-expect-error|eslint|oxlint).+)"
 			}
 		],
 		"no-inner-declarations": ["error", "both"],
