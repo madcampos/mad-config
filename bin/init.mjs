@@ -155,9 +155,12 @@ try {
 		console.log(styleText('cyan', 'Initializing wrangler.json'));
 		const workerName = packageJson.name ?? await prompt('What is the worker name?', options.yes);
 		const workerDomain = await prompt('What is the domain name?', options.yes);
+		// oxlint-disable-next-line no-magic-numbers
+		const wranglerPort = Math.min(9999, Math.max(Math.trunc(Math.random() * 10000), 1000)).toString(10);
 		await copyTemplateFile('wrangler.json', 'wrangler.json', {
 			name: workerName,
-			domain: workerDomain
+			domain: workerDomain,
+			port: wranglerPort
 		});
 
 		console.log(styleText('cyan', 'Creating server dir'));
@@ -180,8 +183,8 @@ try {
 		console.log(styleText('cyan', 'Installing dependencies'));
 		installDependencies(true, 'vite', '@types/node');
 		// oxlint-disable-next-line no-magic-numbers
-		const port = Math.min(9999, Math.max(Math.trunc(Math.random() * 10000), 1000)).toString(10);
-		await copyTemplateFile('vite.config.template', './vite.config.ts', { port });
+		const vitePort = Math.min(9999, Math.max(Math.trunc(Math.random() * 10000), 1000)).toString(10);
+		await copyTemplateFile('vite.config.template', './vite.config.ts', { port: vitePort });
 
 		console.log(styleText('cyan', 'Create public dir'));
 		await writeTextFile('./public/.gitkeep', '');
