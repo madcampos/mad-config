@@ -17,7 +17,6 @@
 			"certs": "mkcert -install && mkcert -key-file=certs/server.key -cert-file=certs/server.crt localhost"
 		},
 		"wrangler": {
-
 			"types": "wrangler types server/env.d.ts",
 			"deploy": "wrangler deploy --minify --env=\"\""
 		},

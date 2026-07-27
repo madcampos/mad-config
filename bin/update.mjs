@@ -6,7 +6,7 @@
 import { parseArgs, styleText } from 'node:util';
 import { cleanup, prompt, showHelp } from '../src/util/cli.mjs';
 import { updateDependencies } from '../src/util/dependencies.mjs';
-import { copyTemplateFile, readPackageJson, updatePackageJson } from '../src/util/files.mjs';
+import { copyTemplateFile, readPackageJson, readTemplateFile, updatePackageJson } from '../src/util/files.mjs';
 
 // #region Config
 /**
@@ -57,14 +57,11 @@ try {
 	console.log(styleText('cyan', 'Updating project'));
 
 	const packageJson = await readPackageJson();
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
+	const packageJsonTemplate = /** @type {import('./init.mjs').PackageJsonTemplate} */ (JSON.parse(await readTemplateFile('package.json')));
 
 	console.log(styleText('cyan', 'Updating package.json engines'));
-	await updatePackageJson({
-		engines: {
-			node: '>=26.4.0',
-			pnpm: '>=11.11.0'
-		}
-	});
+	await updatePackageJson({ engines: packageJsonTemplate.engines });
 
 	if (packageJson.type !== 'module') {
 		console.log(styleText('cyan', 'Adding type module to package.json'));
@@ -87,6 +84,60 @@ try {
 			default:
 		}
 	}
+
+	const scriptKeys = Object.keys(packageJson.scripts ?? {});
+
+	Object.entries(packageJsonTemplate.templateScripts.default).forEach(([key, script]) => {
+		if (scriptKeys.includes(key)) {
+			return;
+		}
+
+		packageJson.scripts ??= {};
+		packageJson.scripts[key] = script;
+	});
+
+	const dependenciesList = [
+		...new Set([
+			...Object.keys(packageJson.dependencies ?? {}),
+			...Object.keys(packageJson.devDependencies ?? {})
+		])
+	];
+
+	if (dependenciesList.includes('wrangler')) {
+		Object.entries(packageJsonTemplate.templateScripts.wrangler).forEach(([key, script]) => {
+			if (scriptKeys.includes(key)) {
+				return;
+			}
+
+			packageJson.scripts ??= {};
+			packageJson.scripts[key] = script;
+		});
+	}
+
+	if (dependenciesList.includes('vite')) {
+		Object.entries(packageJsonTemplate.templateScripts.vite).forEach(([key, script]) => {
+			if (scriptKeys.includes(key)) {
+				return;
+			}
+
+			packageJson.scripts ??= {};
+			packageJson.scripts[key] = script;
+		});
+	}
+
+	if (dependenciesList.includes('vitest')) {
+		Object.entries(packageJsonTemplate.templateScripts.vitest).forEach(([key, script]) => {
+			if (scriptKeys.includes(key)) {
+				return;
+			}
+
+			packageJson.scripts ??= {};
+			packageJson.scripts[key] = script;
+		});
+	}
+
+	console.log(styleText('cyan', 'Updating scripts'));
+	await updatePackageJson({ scripts: packageJson.scripts });
 
 	console.log(styleText('cyan', 'Updating dependencies'));
 	updateDependencies();
