@@ -1,7 +1,6 @@
 // eslint-env node
 
 /// <reference types="@types/node" />
-/// <reference types="vite/client" />
 
 import { readFileSync } from 'node:fs';
 import { defineConfig, type UserConfig } from 'vite';
