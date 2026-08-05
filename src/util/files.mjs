@@ -3,8 +3,8 @@
 /// <reference types="@types/node" />
 
 import { existsSync } from 'node:fs';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, join, resolve } from 'node:path';
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { dirname, join, relative, resolve } from 'node:path';
 
 /**
  * @typedef {Object} PackageJson
@@ -240,5 +240,35 @@ export async function createDir(destPath) {
 		}
 
 		throw err;
+	}
+}
+
+/**
+ * Copies a template directory to a destination path, optionally replacing placeholders with data for each file.
+ *
+ * @param {string} dirName
+ * @param {string} destPath
+ * @param {Record<string, string>} [data]
+ */
+export async function copyTemplateDir(dirName, destPath, data = {}) {
+	await createDir(destPath);
+
+	const templatesDir = resolve(import.meta.dirname, '../templates/');
+	const sourceDirPath = join(templatesDir, dirName);
+
+	process.permission?.has('fs.read', sourceDirPath);
+	const entries = await readdir(sourceDirPath, { recursive: true, encoding: 'utf8', withFileTypes: true });
+
+	for (const entry of entries) {
+		const entryPath = relative(templatesDir, join(entry.parentPath, entry.name));
+		const entryDestPath = join(destPath, relative(sourceDirPath, join(entry.parentPath, entry.name)));
+
+		if (entry.isFile()) {
+			// oxlint-disable-next-line no-await-in-loop
+			await copyTemplateFile(entryPath, entryDestPath, data);
+		} else if (entry.isDirectory()) {
+			// oxlint-disable-next-line no-await-in-loop
+			await createDir(entryDestPath);
+		}
 	}
 }
