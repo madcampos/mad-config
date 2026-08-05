@@ -89,7 +89,7 @@ versionName: ${versionName}
 [compare changes](${baseUrl}/compare/${fromRef}...${toRef})`;
 
 	for (const [group, items = []] of sortedGroups) {
-		changelog += `\n\n${sectionHeaders[group]}\n\n`;
+		changelog += `\n${sectionHeaders[group]}\n\n`;
 
 		for (const item of items) {
 			changelog += `- ${item.message} ([${item.hash}](${baseUrl}/commit/${item.hash}))\n`;

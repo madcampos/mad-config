@@ -73,4 +73,3 @@ Full docs are available as [docs/changelog.md](./docs/changelog.md).
 This script initializes a new project with standard configurations and dependencies.
 
 Full docs are available as [docs/init.md](./docs/init.md).
-
