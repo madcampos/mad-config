@@ -16,11 +16,6 @@ on:
       - "package.json"
       - "pnpm-lock.yaml"
   workflow_dispatch:
-    inputs:
-      branch:
-        description: "Branch to run the workflow against"
-        required: false
-        type: "string"
 
 jobs:
   dependency-review:
@@ -28,16 +23,13 @@ jobs:
     runs-on: "ubuntu-latest"
     permissions:
       contents: "read"
-    env:
-      BRANCH_NAME: "${{ github.event.inputs.branch || github.head_ref || github.ref_name || 'main' }}"
 
     steps:
-      - name: "Checkout repository"
-        uses: "actions/checkout@v7"
-
       - name: "Dependency Review"
         uses: "actions/dependency-review-action@v5"
         with:
+          base-ref: "${{ github.event.pull_request.base.ref || github.base_ref || github.ref_name || 'main' }}"
+          head-ref: "${{ github.event.pull_request.head.ref || github.head_ref || github.ref_name || 'main' }}"
           fail-on-severity: "moderate"
           fail-on-scopes: runtime, development
           allow-licenses: any-OSI
