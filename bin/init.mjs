@@ -6,7 +6,7 @@
 import { parseArgs, styleText } from 'node:util';
 import { cleanup, confirm, prompt, showHelp } from '../src/util/cli.mjs';
 import { execDependency, initRepo, installDependencies } from '../src/util/dependencies.mjs';
-import { copyTemplateFile, readPackageJson, readTemplateFile, updatePackageJson, writeTextFile } from '../src/util/files.mjs';
+import { copyTemplateDir, copyTemplateFile, readPackageJson, readTemplateFile, updatePackageJson, writeTextFile } from '../src/util/files.mjs';
 import { initGit } from '../src/util/git.mjs';
 
 /**
@@ -56,56 +56,16 @@ try {
 	console.log(styleText('cyan', 'git Initializing git'));
 	initGit();
 
-	console.log(styleText('cyan', 'Running npm init'));
+	console.log(styleText('cyan', 'Running pnpm init'));
 	initRepo();
-	// #endregion
-
-	// #region Dependencies
-	console.log(styleText('cyan', 'Adding pnpm-workspace.yaml'));
-	await copyTemplateFile('pnpm-workspace.yaml', './pnpm-workspace.yaml');
-
 	const packageJson = await readPackageJson();
-	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
-	const packageJsonTemplate = /** @type {PackageJsonTemplate} */ (JSON.parse(await readTemplateFile('package.json')));
-
-	console.log(styleText('cyan', 'Installing dependencies'));
-	installDependencies(true, 'dprint', 'typescript', 'oxlint', '@mad-c/config');
-
-	console.log(styleText('cyan', 'Updating package.json scripts'));
-	packageJson.scripts = packageJsonTemplate.templateScripts.default;
-
-	console.log(styleText('cyan', 'Updating package.json engines'));
-	packageJson.engines = packageJsonTemplate.engines;
-
-	await updatePackageJson({
-		scripts: packageJson.scripts,
-		engines: packageJson.engines
-	});
 	// #endregion
 
 	// #region Files
-	console.log(styleText('cyan', 'Creating src folder'));
-	await writeTextFile('src/index.ts', '// TODO: entry point');
+	console.log(styleText('cyan', 'Creating base files'));
+	await copyTemplateDir('base', './', { name: packageJson.name ?? '' });
 
-	console.log(styleText('cyan', 'Adding .gitignore'));
-	await copyTemplateFile('.gitignore', '.gitignore');
-
-	console.log(styleText('cyan', 'Adding README.md'));
-	await writeTextFile('./README.md', `# ${packageJson.name ?? ''}\n`);
-
-	console.log(styleText('cyan', 'Adding dependabot config'));
-	await copyTemplateFile('dependabot.yml', '.github/dependabot.yml');
-
-	console.log(styleText('cyan', 'Adding oxlint config'));
-	await copyTemplateFile('.oxlintrc.json', '.oxlintrc.json');
-
-	console.log(styleText('cyan', 'Adding dprint config'));
-	await copyTemplateFile('dprint.json', 'dprint.json');
-
-	console.log(styleText('cyan', 'Adding typescript config'));
-	await copyTemplateFile('tsconfig.json', 'tsconfig.json');
-
-	const license = await prompt('What license would you like to add? [mit/lgpl/other]', options.yes);
+	const license = await prompt('What license would you like to add? [mit/lgpl/unlicensed]', options.yes);
 	switch (license) {
 		case 'mit':
 			console.log(styleText('cyan', 'Saving licence file'));
@@ -118,7 +78,27 @@ try {
 			await updatePackageJson({ license: 'LGPL-3' });
 			break;
 		default:
+			await updatePackageJson({ license: 'UNLICENSED' });
 	}
+	// #endregion
+
+	// #region Dependencies
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
+	const packageJsonTemplate = /** @type {PackageJsonTemplate} */ (JSON.parse(await readTemplateFile('package.json')));
+
+	console.log(styleText('cyan', 'Installing dependencies'));
+	installDependencies(true, 'dprint', 'typescript', 'oxlint', 'oxlint-tsgolint', '@mad-c/config');
+
+	console.log(styleText('cyan', 'Updating package.json scripts'));
+	packageJson.scripts = packageJsonTemplate.templateScripts.default;
+
+	console.log(styleText('cyan', 'Updating package.json engines'));
+	packageJson.engines = packageJsonTemplate.engines;
+
+	await updatePackageJson({
+		scripts: packageJson.scripts,
+		engines: packageJson.engines
+	});
 	// #endregion
 
 	// #region Certificates
@@ -152,19 +132,17 @@ try {
 		console.log(styleText('cyan', 'Installing dependencies'));
 		installDependencies(true, 'wrangler');
 
-		console.log(styleText('cyan', 'Initializing wrangler.json'));
 		const workerName = packageJson.name ?? await prompt('What is the worker name?', options.yes);
 		const workerDomain = await prompt('What is the domain name?', options.yes);
 		// oxlint-disable-next-line no-magic-numbers
-		const wranglerPort = Math.min(9999, Math.max(Math.trunc(Math.random() * 10000), 1000)).toString(10);
-		await copyTemplateFile('wrangler.json', 'wrangler.json', {
+		const workerPort = Math.min(9999, Math.max(Math.trunc(Math.random() * 10000), 1000)).toString(10);
+
+		console.log(styleText('cyan', 'Creating server files'));
+		await copyTemplateDir('wrangler', './', {
 			name: workerName,
 			domain: workerDomain,
-			port: wranglerPort
+			port: workerPort
 		});
-
-		console.log(styleText('cyan', 'Creating server dir'));
-		await writeTextFile('server/index.ts', '// TODO: server entry point');
 
 		console.log(styleText('cyan', 'Updating package.json scripts'));
 		packageJson.scripts = {
@@ -172,22 +150,23 @@ try {
 			...packageJsonTemplate.templateScripts.wrangler
 		};
 		await updatePackageJson({ scripts: packageJson.scripts });
-
-		console.log(styleText('cyan', 'Create public dir'));
-		await writeTextFile('./public/.gitkeep', '');
 	}
 	// #endregion
 
 	// #region Vite/Vitest
 	if (await confirm('Do you want to add vite?', options.yes)) {
 		console.log(styleText('cyan', 'Installing dependencies'));
-		installDependencies(true, 'vite', '@types/node');
+		installDependencies(true, 'vite', '@types/node', 'open-props');
+
 		// oxlint-disable-next-line no-magic-numbers
 		const vitePort = Math.min(9999, Math.max(Math.trunc(Math.random() * 10000), 1000)).toString(10);
-		await copyTemplateFile('vite.config.template', './vite.config.ts', { port: vitePort });
 
-		console.log(styleText('cyan', 'Create public dir'));
-		await writeTextFile('./public/.gitkeep', '');
+		console.log(styleText('cyan', 'Create app files'));
+		await copyTemplateDir('webapp', './', {
+			id: crypto.randomUUID(),
+			name: packageJson.name ?? '',
+			port: vitePort
+		});
 
 		console.log(styleText('cyan', 'Updating package.json scripts'));
 		packageJson.scripts = {
@@ -199,7 +178,7 @@ try {
 		if (await confirm('Do you want to add vitest?', options.yes)) {
 			console.log(styleText('cyan', 'Installing dependencies'));
 			installDependencies(true, 'vitest', '@vitest/coverage-v8', '@vitest/browser-playwright');
-			await copyTemplateFile('vitest.config.template', './vitest.config.ts');
+			await copyTemplateFile('vitest.config.ts', './vitest.config.ts');
 
 			console.log(styleText('cyan', 'Updating package.json scripts'));
 			packageJson.scripts = {

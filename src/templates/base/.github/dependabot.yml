@@ -21,9 +21,6 @@ updates:
     commit-message:
       prefix: "[dependency update]"
     groups:
-      dev-dependencies:
-        patterns:
-          - "*"
       dependencies:
         patterns:
           - "*"

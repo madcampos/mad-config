@@ -1,0 +1,119 @@
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	color-interpolation-filters="sRGB"
+	viewBox="0 0 100 100"
+	data-icon-type="any"
+>
+	<!-- dprint-ignore -->
+	<style>
+		/**
+		 * Use these data attributes to enable what is shown when generating the icons.
+		 * E.g.: if the graphic should show on "monochrome" add the `data-monochrome` attribute to it.
+		 */
+
+		svg[data-icon-type="any"] :not([data-any]),
+		svg[data-icon-type="maskable"] :not([data-maskable]),
+		svg[data-icon-type="monochrome"] :not([data-monochrome]),
+		svg[data-icon-type="ios"] :not([data-ios]) { visibility: hidden; }
+	</style>
+
+	<defs>
+		<g id="icon-bg">
+			<!-- TODO: add icon bg -->
+		</g>
+
+		<g id="icon-shape">
+			<!-- TODO: add icon bg -->
+		</g>
+
+		<g id="icon">
+			<!-- TODO: add icon bg -->
+		</g>
+
+		<!-- INFO: use this guide for designing icons, comment out the one you will not use -->
+		<g id="guide" stroke-width="0.2" fill="transparent" stroke-opacity="0.5">
+			<!-- Android guide -->
+			<g stroke="lightgray">
+				<rect
+					x="12.5"
+					y="12.5"
+					width="75"
+					height="75"
+					stroke="cyan"
+					fill="cyan"
+					fill-opacity="0.1"
+				/>
+				<rect
+					x="12.5"
+					y="12.5"
+					width="75"
+					height="75"
+					rx="22"
+					stroke="transparent"
+					fill="red"
+					fill-opacity="0.3"
+				/>
+
+				<line id="guide-android-horizontal" x1="0" y1="37.5" x2="100" y2="37.5" />
+				<use xlink:href="#guide-android-horizontal" y="12.5" />
+				<use xlink:href="#guide-android-horizontal" y="25" />
+
+				<line id="guide-android-vertical" x1="37.5" y1="0" x2="37.5" y2="100" />
+				<use xlink:href="#guide-android-vertical" x="12.5" />
+				<use xlink:href="#guide-android-vertical" x="25" />
+
+				<line x1="12.5" y1="12.5" x2="87.5" y2="87.5" />
+				<line x1="87.5" y1="12.5" x2="12.5" y2="87.5" />
+
+				<rect x="20" y="20" width="60" height="60" rx="2" />
+				<rect x="25" y="15" width="50" height="70" rx="2" />
+				<rect x="15" y="25" width="70" height="50" rx="2" />
+
+				<circle cx="50" cy="50" r="35" />
+				<circle cx="50" cy="50" r="17.5" />
+			</g>
+
+			<!-- iOS guide -->
+			<g stroke="dimgray">
+				<path d="M 30 0 L 70 0 C 88 0, 100 12, 100 30 L 100 70 C 100 88, 88 100, 70 100 L 30 100 C 12 100, 0 88, 0 70 L 0 30 C 0 12, 12 0, 30 0 Z" />
+
+				<line id="guide-ios-horizontal" x1="0" y1="12.5" x2="100" y2="12.5" />
+				<use xlink:href="#guide-ios-horizontal" y="12.5" />
+				<use xlink:href="#guide-ios-horizontal" y="25" />
+				<use xlink:href="#guide-ios-horizontal" y="37.5" />
+				<use xlink:href="#guide-ios-horizontal" y="50" />
+				<use xlink:href="#guide-ios-horizontal" y="62.5" />
+				<use xlink:href="#guide-ios-horizontal" y="75" />
+
+				<line id="guide-ios-vertical" x1="12.5" y1="0" x2="12.5" y2="100" />
+				<use xlink:href="#guide-ios-vertical" x="12.5" />
+				<use xlink:href="#guide-ios-vertical" x="25" />
+				<use xlink:href="#guide-ios-vertical" x="37.5" />
+				<use xlink:href="#guide-ios-vertical" x="50" />
+				<use xlink:href="#guide-ios-vertical" x="62.5" />
+				<use xlink:href="#guide-ios-vertical" x="75" />
+
+				<line x1="0" y1="0" x2="100" y2="100" />
+				<line x1="100" y1="0" x2="0" y2="100" />
+
+				<circle cx="50" cy="50" r="40" />
+				<circle cx="50" cy="50" r="25" />
+				<circle cx="50" cy="50" r="10" />
+			</g>
+		</g>
+	</defs>
+
+	<use xlink:href="#icon-shape" data-any="true" />
+	<use xlink:href="#icon" data-any="true" />
+
+	<use xlink:href="#icon-bg" data-maskable="true" />
+	<use xlink:href="#icon" data-maskable="true" />
+
+	<use xlink:href="#icon" data-monochrome="true" />
+
+	<use xlink:href="#icon-bg" data-ios="true" />
+	<use xlink:href="#icon" data-ios="true" transform="scale(0.75 0.75)" transform-origin="center" />
+
+	<!-- <use xlink:href="#guide" data-any="true" data-maskable="true" data-monochrome="true" data-ios="true" /> -->
+</svg>

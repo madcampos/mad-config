@@ -1,0 +1,125 @@
+{
+	"$schema": "https://www.schemastore.org/web-manifest-combined.json",
+	"id": "/?id={{id}}",
+	"scope": "/?utm_source=pwa&utm_medium=install&utm_campaign=web_app_manifest",
+	"start_url": "/?utm_source=pwa&utm_medium=start_url&utm_campaign=web_app_manifest",
+	"scope_extensions": [{ "type": "origin", "origin": "" }],
+	"name": "{{name}}",
+	"short_name": "{{name}}",
+	"lang": "en-US",
+	"dir": "ltr",
+	"description": "",
+	"categories": [],
+	"display": "minimal-ui",
+	"display_override": ["window-controls-overlay"],
+	"orientation": "any",
+	"background_color": "",
+	"theme_color": "",
+	"color_scheme_dark": {
+		"theme_color": "",
+		"background_color": ""
+	},
+	"prefer_related_applications": false,
+	"icons": [
+		{
+			"src": "/icons/icon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "any"
+		},
+		{
+			"src": "/icons/icon-1024x1024.png",
+			"sizes": "1024x1024",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/icons/icon-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/icons/icon-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/icons/icon-mask.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "maskable"
+		},
+		{
+			"src": "/icons/icon-mask-1024x1024.png",
+			"sizes": "1024x1024",
+			"type": "image/png",
+			"purpose": "maskable"
+		},
+		{
+			"src": "/icons/icon-mask-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		},
+		{
+			"src": "/icons/icon-mask-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "maskable"
+		},
+		{
+			"src": "/icons/icon-mono.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "monochrome"
+		},
+		{
+			"src": "/icons/icon-mono-1024x1024.png",
+			"sizes": "1024x1024",
+			"type": "image/png",
+			"purpose": "monochrome"
+		},
+		{
+			"src": "/icons/icon-mono-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "monochrome"
+		},
+		{
+			"src": "/icons/icon-mono-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "monochrome"
+		},
+		{
+			"src": "/icons/icon-mask-mono.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "maskable monochrome"
+		},
+		{
+			"src": "/icons/icon-mask-mono-1024x1024.png",
+			"sizes": "1024x1024",
+			"type": "image/png",
+			"purpose": "maskable monochrome"
+		},
+		{
+			"src": "/icons/icon-mask-mono-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable monochrome"
+		},
+		{
+			"src": "/icons/icon-mask-mono-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "maskable monochrome"
+		}
+	],
+	"handle_links": "preffered",
+	"launch_handler": { "client_mode": "auto" },
+	"protocol_handlers": [],
+	"edge_side_panel": { "preffer_width": 460 }
+}

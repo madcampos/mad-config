@@ -1,0 +1,96 @@
+:root {
+	/* Default size for body text */
+	/* INFO: set as a percentage to allow for OS level sizing */
+	--base-font-size: 112.5%;
+
+	/* Size overrides */
+	--size-content-0: 10ch;
+	--size-content-1: 20ch;
+	--size-content-2: 45ch;
+	--size-content-3: 76ch;
+	--size-content-4: 120ch;
+
+	--size-header-0: 5ch;
+	--size-header-1: 15ch;
+	--size-header-2: 30ch;
+	--size-header-3: 45ch;
+	--size-header-4: 96ch;
+
+	/* Theme color base */
+	--theme-color: ;
+	--accent-color: ;
+	--secondary-color: ;
+
+	/* Theme colors */
+	--theme-0: hsl(from var(--theme-color) h s 07.6%);
+	--theme-1: hsl(from var(--theme-color) h s 15.2%);
+	--theme-2: hsl(from var(--theme-color) h s 22.8%);
+	--theme-3: hsl(from var(--theme-color) h s 30.4%);
+	--theme-4: hsl(from var(--theme-color) h s 38%);
+	--theme-5: hsl(from var(--theme-color) h s 45.6%);
+	--theme-6: hsl(from var(--theme-color) h s 53.2%);
+	--theme-7: hsl(from var(--theme-color) h s 60.8%);
+	--theme-8: hsl(from var(--theme-color) h s 68.4%);
+	--theme-9: hsl(from var(--theme-color) h s 76%);
+	--theme-10: hsl(from var(--theme-color) h s 83.6%);
+	--theme-11: hsl(from var(--theme-color) h s 91.2%);
+	--theme-12: hsl(from var(--theme-color) h s 98.8%);
+	--accent-0: hsl(from var(--accent-color) h s 07.6%);
+	--accent-1: hsl(from var(--accent-color) h s 15.2%);
+	--accent-2: hsl(from var(--accent-color) h s 22.8%);
+	--accent-3: hsl(from var(--accent-color) h s 30.4%);
+	--accent-4: hsl(from var(--accent-color) h s 38%);
+	--accent-5: hsl(from var(--accent-color) h s 45.6%);
+	--accent-6: hsl(from var(--accent-color) h s 53.2%);
+	--accent-7: hsl(from var(--accent-color) h s 60.8%);
+	--accent-8: hsl(from var(--accent-color) h s 68.4%);
+	--accent-9: hsl(from var(--accent-color) h s 76%);
+	--accent-10: hsl(from var(--accent-color) h s 83.6%);
+	--accent-11: hsl(from var(--accent-color) h s 91.2%);
+	--accent-12: hsl(from var(--accent-color) h s 98.8%);
+	--secondary-0: hsl(from var(--secondary-color) h s 07.6%);
+	--secondary-1: hsl(from var(--secondary-color) h s 15.2%);
+	--secondary-2: hsl(from var(--secondary-color) h s 22.8%);
+	--secondary-3: hsl(from var(--secondary-color) h s 30.4%);
+	--secondary-4: hsl(from var(--secondary-color) h s 38%);
+	--secondary-5: hsl(from var(--secondary-color) h s 45.6%);
+	--secondary-6: hsl(from var(--secondary-color) h s 53.2%);
+	--secondary-7: hsl(from var(--secondary-color) h s 60.8%);
+	--secondary-8: hsl(from var(--secondary-color) h s 68.4%);
+	--secondary-9: hsl(from var(--secondary-color) h s 76%);
+	--secondary-10: hsl(from var(--secondary-color) h s 83.6%);
+	--secondary-11: hsl(from var(--secondary-color) h s 91.2%);
+	--secondary-12: hsl(from var(--secondary-color) h s 98.8%);
+
+	/* Base colors */
+	--text-1: var(--gray-12);
+	--text-2: var(--gray-8);
+	--surface-1: color-mix(in oklch increasing hue, var(--gray-0) 85%, var(--theme-0));
+	--surface-2: color-mix(in oklch increasing hue, var(--gray-2) 80%, var(--theme-2));
+	--surface-3: color-mix(in oklch increasing hue, var(--gray-4) 80%, var(--theme-4));
+	--surface-4: color-mix(in oklch increasing hue, var(--gray-6) 80%, var(--theme-6));
+
+	/* Link colors */
+	--link-color: ;
+	--link-visited-color: ;
+	--link-hover-color: ;
+	--link-active-color: ;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		/* Base colors */
+		--text-1: var(--gray-0);
+		--text-2: var(--gray-4);
+		--surface-1: color-mix(in oklch increasing hue, var(--gray-12) 85%, var(--theme-12));
+		--surface-2: color-mix(in oklch increasing hue, var(--gray-10) 80%, var(--theme-10));
+		--surface-3: color-mix(in oklch increasing hue, var(--gray-8) 80%, var(--theme-8));
+		--surface-4: color-mix(in oklch increasing hue, var(--gray-6) 80%, var(--theme-6));
+
+		/* Link colors */
+		--link-color: ;
+		--link-visited-color: ;
+		--link-hover-color: ;
+		--link-active-color: ;
+	}
+}
