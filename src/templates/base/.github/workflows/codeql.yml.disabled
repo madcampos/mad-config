@@ -10,6 +10,11 @@ on:
     tags:
       - "*"
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to run the workflow against"
+        required: false
+        type: "string"
 
 jobs:
   codeql-analyze:
@@ -21,7 +26,7 @@ jobs:
       actions: "read"
       contents: "read"
     env:
-      BRANCH_NAME: "${{ github.head_ref || github.ref_name }}"
+      BRANCH_NAME: "${{ github.event.inputs.branch || github.head_ref || github.ref_name || 'main' }}"
     concurrency:
       group: "ci-codeql-${{ github.workflow }}-${{ github.ref }}"
       cancel-in-progress: true

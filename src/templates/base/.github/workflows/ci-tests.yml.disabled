@@ -11,13 +11,18 @@ on:
     tags:
       - "*"
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to run the workflow against"
+        required: false
+        type: "string"
 
 jobs:
   unit-tests:
     name: "Unit Tests"
     runs-on: "ubuntu-latest"
     env:
-      BRANCH_NAME: "${{ github.head_ref || github.ref_name }}"
+      BRANCH_NAME: "${{ github.event.inputs.branch || github.head_ref || github.ref_name || 'main' }}"
     concurrency:
       group: "ci-unit-tests-${{ github.workflow }}-${{ github.ref }}"
       cancel-in-progress: true

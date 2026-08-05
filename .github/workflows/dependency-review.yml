@@ -16,6 +16,11 @@ on:
       - "package.json"
       - "pnpm-lock.yaml"
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to run the workflow against"
+        required: false
+        type: "string"
 
 jobs:
   dependency-review:
@@ -24,7 +29,7 @@ jobs:
     permissions:
       contents: "read"
     env:
-      BRANCH_NAME: "${{ github.head_ref || github.ref_name }}"
+      BRANCH_NAME: "${{ github.event.inputs.branch || github.head_ref || github.ref_name || 'main' }}"
 
     steps:
       - name: "Checkout repository"
