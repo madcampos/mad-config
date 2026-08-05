@@ -15,6 +15,7 @@ on:
     paths:
       - "package.json"
       - "pnpm-lock.yaml"
+  workflow_dispatch:
 
 jobs:
   dependency-review:
@@ -33,6 +34,6 @@ jobs:
         uses: "actions/dependency-review-action@v5"
         with:
           fail-on-severity: "moderate"
-          fail-on-scopes: ["runtime", "development"]
-          allow-licenses: ["any-OSI"]
+          fail-on-scopes: runtime, development
+          allow-licenses: any-OSI
           comment-summary-in-pr: always

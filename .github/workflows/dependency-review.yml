@@ -15,6 +15,7 @@ on:
     paths:
       - "package.json"
       - "pnpm-lock.yaml"
+  workflow_dispatch:
 
 jobs:
   dependency-review:
