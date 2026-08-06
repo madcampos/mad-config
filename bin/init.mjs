@@ -64,6 +64,7 @@ try {
 	// #region Files
 	console.log(styleText('cyan', 'Creating base files'));
 	await copyTemplateDir('base', './', { name: packageJson.name ?? '' });
+	await copyTemplateFile('dprint-template.json', './dprint.json');
 
 	const license = await prompt('What license would you like to add? [mit/lgpl/unlicensed]', options.yes);
 	switch (license) {

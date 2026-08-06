@@ -52,4 +52,4 @@ jobs:
           cache: true
 
       - name: "Check files formatting"
-        run: "pnpm run format"
+        run: "pnpm dlx dprint check"
