@@ -171,3 +171,5 @@ if (options['create-release']) {
 		notesFile: changelogFile
 	});
 }
+
+process.exit(0);

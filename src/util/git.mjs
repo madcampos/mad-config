@@ -2,20 +2,32 @@
 
 /// <reference types="@types/node" />
 
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 
 /**
  * Executes a Git command and returns the trimmed output.
  *
- * @param {string} command - The Git subcommand and arguments to run.
+ * @param {string[]} args - The Git subcommand and arguments to run.
  */
-function invokeGit(command) {
-	const gitCommand = `git ${command}`;
-
+function invokeGit(...args) {
 	try {
-		process.permission?.has('child', gitCommand);
+		process.permission?.has('child', 'git');
 
-		return execSync(gitCommand, { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+		const spawnResult = spawnSync('git', args.filter(Boolean), {
+			shell: false,
+			encoding: 'utf-8',
+			stdio: ['ignore', 'pipe', 'pipe']
+		});
+
+		if (spawnResult.error) {
+			throw spawnResult.error;
+		}
+
+		if (spawnResult.stderr) {
+			throw new Error(spawnResult.stderr);
+		}
+
+		return spawnResult.stdout.trim();
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
 			console.error('Permission to spawn child processes is required.');
@@ -38,18 +50,18 @@ export function getFromRef(latestVersion, originalFromRef) {
 	let fromRef = originalFromRef ?? '';
 
 	if (!fromRef) {
-		const latestGitVersion = invokeGit(`describe --tags --abbrev=0 "${latestVersion}^"`);
+		const latestGitVersion = invokeGit('describe', '--tags', '--abbrev=0', `${latestVersion}^`);
 		const isLatestHead = latestVersion === 'HEAD';
 		const doesLatestVersionMatchGit = latestVersion === latestGitVersion;
 
 		if (isLatestHead || doesLatestVersionMatchGit) {
-			fromRef = invokeGit(`describe --tags --abbrev=0 "${latestGitVersion}^"`);
+			fromRef = invokeGit('describe', '--tags', '--abbrev=0', `${latestGitVersion}^`);
 		} else {
 			fromRef = latestGitVersion;
 		}
 	}
 
-	fromRef ||= invokeGit('rev-list --max-parents=0 HEAD');
+	fromRef ||= invokeGit('rev-list', '--max-parents=0', 'HEAD');
 
 	return fromRef;
 }
@@ -63,7 +75,7 @@ export function getFromRef(latestVersion, originalFromRef) {
  * @returns {import('./changelog.mjs').Commit[]} An array of commit objects.
  */
 export function getCommits(fromRef, toRef) {
-	const logOutput = invokeGit(`log ${fromRef ? `${fromRef}...` : ''}${toRef} --pretty=format:"%h%x09%s"`);
+	const logOutput = invokeGit('log', fromRef ? `${fromRef}...` : '', toRef, "--pretty=format:'%h%x09%s'");
 	const lines = logOutput.split('\n');
 
 	const commits = lines.map((line) => {
@@ -84,7 +96,7 @@ export function getCommits(fromRef, toRef) {
  * Retrieves the base URL of the `origin` remote, removing `.git` suffixes.
  */
 export function getBaseUrl() {
-	const baseUrl = invokeGit('remote get-url origin')
+	const baseUrl = invokeGit('remote', 'get-url', 'origin')
 		.replace('.github.io.git', '')
 		.replace(/\.git$/iu, '');
 
@@ -97,7 +109,7 @@ export function getBaseUrl() {
  * @param {string} toRef - The git ref to use.
  */
 export function getLastCommitDate(toRef) {
-	const lastCommitDate = invokeGit(`log -1 --format="%cI" "${toRef}"`);
+	const lastCommitDate = invokeGit('log', '-1', "--format='%cI'", toRef);
 
 	return lastCommitDate;
 }
@@ -108,8 +120,8 @@ export function getLastCommitDate(toRef) {
  * @param {string} commitMessage - The commit message to use.
  */
 export function commitChangelog(destFile, commitMessage) {
-	invokeGit(`add "${destFile}"`);
-	invokeGit(`commit -m "${commitMessage}" --quiet`);
+	invokeGit('add', destFile);
+	invokeGit('commit', '-m', commitMessage);
 }
 
 /**
@@ -118,14 +130,14 @@ export function commitChangelog(destFile, commitMessage) {
  * @param {string} versionName - The version for the new tag.
  */
 export function createGitTag(versionName) {
-	invokeGit(`tag -a "${versionName}" -m "${versionName}"`);
+	invokeGit('tag', '-a', versionName, '-m', versionName);
 }
 
 /**
  * Push the most recent git changes, including tags.
  */
 export function pushChanges() {
-	invokeGit('push --follow-tags --quiet');
+	invokeGit('push', '--follow-tags', '--quiet');
 }
 
 /**
@@ -136,12 +148,22 @@ export function pushChanges() {
  * @param {string} options.notesFile - The file path to a markdown file containing the release notes.
  */
 export function createRelease({ versionName, notesFile }) {
-	const command = `gh release create "${versionName}" --notes-file "${notesFile}" --title "${versionName}"`;
-
 	try {
-		process.permission?.has('child', command);
+		process.permission?.has('child', 'gh');
 
-		execSync(command, { stdio: 'inherit' });
+		spawnSync('gh', [
+			'release',
+			'create',
+			versionName,
+			'--notes-file',
+			notesFile,
+			'--title',
+			versionName
+		], {
+			shell: false,
+			encoding: 'utf-8',
+			stdio: 'inherit'
+		});
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
 			console.error('Permission to spawn child processes is required.');

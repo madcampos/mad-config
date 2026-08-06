@@ -1,6 +1,6 @@
 // oxlint-disable typescript/no-unnecessary-condition
 
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 
 /**
  * Installs dependencies using `pnpm`.
@@ -9,12 +9,26 @@ import { execSync } from 'node:child_process';
  * @param {...string} dependencies
  */
 export function installDependencies(isDev = false, ...dependencies) {
-	const installCommand = `pnpm install${isDev ? ' --save-dev' : ''} ${dependencies.join(' ')}`;
-
 	try {
-		process.permission?.has('child', installCommand);
+		process.permission?.has('child', 'pnpm');
 
-		return execSync(installCommand, { encoding: 'utf-8', stdio: ['ignore', 'ignore', 'pipe'] });
+		const spawnResult = spawnSync('pnpm', [
+			'install',
+			isDev ? ' --save-dev' : '',
+			...dependencies.filter(Boolean)
+		], {
+			shell: false,
+			encoding: 'utf-8',
+			stdio: ['ignore', 'ignore', 'pipe']
+		});
+
+		if (spawnResult.error) {
+			throw spawnResult.error;
+		}
+
+		if (spawnResult.stderr) {
+			throw new Error(spawnResult.stderr);
+		}
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
 			console.error('Permission to spawn child processes is required.');
@@ -28,12 +42,22 @@ export function installDependencies(isDev = false, ...dependencies) {
  * Init a repository using `pnpm`.
  */
 export function initRepo() {
-	const installCommand = `pnpm init -y`;
-
 	try {
-		process.permission?.has('child', installCommand);
+		process.permission?.has('child', 'pnpm');
 
-		return execSync(installCommand, { encoding: 'utf-8', stdio: ['ignore', 'ignore', 'pipe'] });
+		const spawnResult = spawnSync('pnpm', ['init', '-y'], {
+			shell: false,
+			encoding: 'utf-8',
+			stdio: ['ignore', 'ignore', 'pipe']
+		});
+
+		if (spawnResult.error) {
+			throw spawnResult.error;
+		}
+
+		if (spawnResult.stderr) {
+			throw new Error(spawnResult.stderr);
+		}
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
 			console.error('Permission to spawn child processes is required.');
@@ -47,12 +71,22 @@ export function initRepo() {
  * Updates dependencies using `pnpm`.
  */
 export function updateDependencies() {
-	const command = `pnpm update`;
-
 	try {
-		process.permission?.has('child', command);
+		process.permission?.has('child', 'pnpm');
 
-		return execSync(command, { encoding: 'utf-8', stdio: ['ignore', 'ignore', 'pipe'] });
+		const spawnResult = spawnSync('pnpm', ['update'], {
+			shell: false,
+			encoding: 'utf-8',
+			stdio: ['ignore', 'ignore', 'pipe']
+		});
+
+		if (spawnResult.error) {
+			throw spawnResult.error;
+		}
+
+		if (spawnResult.stderr) {
+			throw new Error(spawnResult.stderr);
+		}
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
 			console.error('Permission to spawn child processes is required.');
@@ -69,12 +103,28 @@ export function updateDependencies() {
  * @param {...string} params
  */
 export function execDependency(dependency, ...params) {
-	const command = `pnpm dlx ${dependency}${params.length ? ` ${params.join(' ')}` : ''}`;
-
 	try {
-		process.permission?.has('child', command);
+		process.permission?.has('child', 'pnpm');
 
-		return execSync(command, { encoding: 'utf-8', stdio: 'inherit' });
+		const spawnResult = spawnSync('pnpm', [
+			'dlx',
+			dependency,
+			...params
+		], {
+			shell: false,
+			encoding: 'utf-8',
+			stdio: 'inherit'
+		});
+
+		if (spawnResult.error) {
+			throw spawnResult.error;
+		}
+
+		if (spawnResult.stderr) {
+			throw new Error(spawnResult.stderr);
+		}
+
+		return spawnResult.stdout.trim();
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
 			console.error('Permission to spawn child processes is required.');

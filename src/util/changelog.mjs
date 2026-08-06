@@ -1,3 +1,5 @@
+const MAX_MESSAGE_LENGTH = 1024;
+
 const defaultSectionHeaders = {
 	breaking: '### Breaking Changes',
 	revert: '### Changes Rollback',
@@ -54,11 +56,13 @@ export function changelogFromCommits({
 	const commitMessages = commits
 		.filter(({ hash }) => hash)
 		.map(({ hash, message }) => {
+			const messageFirstLine = (message.split('\n')[0] ?? '').substring(0, MAX_MESSAGE_LENGTH);
+
 			const commitRegex = /^(?<type>\w+)(?:\((?<scope>.*)\))?(?<breaking>!)?: (?<desc>.*)$/iu;
-			const match = commitRegex.exec(message);
+			const match = commitRegex.exec(messageFirstLine);
 
 			let group = miscSectionHeader;
-			let logMessage = message;
+			let logMessage = messageFirstLine;
 
 			if (match?.groups) {
 				const { type = miscSectionHeader, scope = '', breaking = '', desc = '' } = match.groups;
