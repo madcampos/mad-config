@@ -17,7 +17,7 @@ import { dirname, join, relative, resolve } from 'node:path';
  * @property {Record<string, string>} [dependencies]
  * @property {Record<string, string>} [devDependencies]
  * @property {Record<string, string>} [peerDependencies]
- * @property {Record<string, string>} [engines]
+ * @property {Record<string, unknown>} [devEngines]
  * @property {string | Record<string, string>} [bin]
  * @property {string[]} [files]
  * @property {Record<string, string | Record<string, string>>} [exports]

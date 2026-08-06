@@ -11,7 +11,7 @@ import { initGit } from '../src/util/git.mjs';
 
 /**
  * @typedef {object} PackageJsonTemplate
- * @property {Record<string, string>} engines
+ * @property {Record<string, unknown>} devEngines
  * @property {object} templateScripts
  * @property {Record<string, string>} templateScripts.default
  * @property {Record<string, string>} templateScripts.certs
@@ -93,11 +93,11 @@ try {
 	packageJson.scripts = packageJsonTemplate.templateScripts.default;
 
 	console.log(styleText('cyan', 'Updating package.json engines'));
-	packageJson.engines = packageJsonTemplate.engines;
+	packageJson.devEngines = packageJsonTemplate.devEngines;
 
 	await updatePackageJson({
 		scripts: packageJson.scripts,
-		engines: packageJson.engines
+		devEngines: packageJson.devEngines
 	});
 	// #endregion
 

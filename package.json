@@ -5,9 +5,17 @@
 	"keywords": [
 		"shared config"
 	],
-	"engines": {
-		"node": ">=26.4.0",
-		"pnpm": ">=11.11.0"
+	"devEngines": {
+		"runtime": {
+			"name": "node",
+			"version": "^26.4.0",
+			"onFail": "error"
+		},
+		"packageManager": {
+			"name": "pnpm",
+			"version": "^11.20.0",
+			"onFail": "error"
+		}
 	},
 	"author": {
 		"name": "madcampos",
