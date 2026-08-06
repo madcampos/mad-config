@@ -31,14 +31,10 @@ jobs:
       - name: "Checkout repository"
         uses: "actions/checkout@v7"
 
-      - name: "Setup node"
-        uses: "actions/setup-node@v7"
+      - name: "Setup node and pnpm"
+        uses: "pnpm/setup@v2"
         with:
-          node-version: "latest"
-          cache: "pnpm"
-
-      - name: "Install dependencies"
-        run: "pnpm install --frozen-lockfile"
+          cache: true
 
       - name: "Run unit tests"
         run: "pnpm test"
