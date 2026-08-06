@@ -180,6 +180,12 @@ export async function copyTemplateFile(fileName, destPath, data = {}) {
 		let contents = await readTemplateFile(fileName);
 
 		Object.entries(data).forEach(([key, value]) => {
+			if (typeof value !== 'string') {
+				// INFO: for non string values that need to be string in the templates, replace the quoted options as well
+				contents = contents.replaceAll(`'{{${key}}}'`, value);
+				contents = contents.replaceAll(`"{{${key}}}"`, value);
+			}
+
 			contents = contents.replaceAll(`{{${key}}}`, value);
 		});
 

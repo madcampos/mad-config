@@ -17,7 +17,7 @@
 	},
 	"dev": {
 		"ip": "localhost",
-		"port": {{port}},
+		"port": "{{port}}",
 		"local_protocol": "https",
 		"upstream_protocol": "https"
 	},

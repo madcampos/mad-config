@@ -61,7 +61,7 @@ try {
 	const packageJsonTemplate = /** @type {import('./init.mjs').PackageJsonTemplate} */ (JSON.parse(await readTemplateFile('package.json')));
 
 	console.log(styleText('cyan', 'Updating package.json engines'));
-	await updatePackageJson({ engines: packageJsonTemplate.engines });
+	await updatePackageJson({ devEngines: packageJsonTemplate.devEngines });
 
 	if (packageJson.type !== 'module') {
 		console.log(styleText('cyan', 'Adding type module to package.json'));

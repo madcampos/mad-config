@@ -3,7 +3,7 @@
 /// <reference types="@types/node" />
 
 import { readFileSync } from 'node:fs';
-import { defineConfig, type UserConfig } from 'vite';
+import { type UserConfig, defineConfig } from 'vite';
 
 // oxlint-disable-next-line import/no-default-export
 export default defineConfig(({ mode }) => {
@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
 		https: sslOptions,
 		host: 'localhost',
 		cors: true,
-		port: {{port}},
+		port: '{{port}}',
 		strictPort: true
 	};
 
@@ -33,8 +33,8 @@ export default defineConfig(({ mode }) => {
 			open: false,
 			forwardConsole: {
 				unhandledErrors: true,
-				logLevels: ['warn', 'error'],
-			},
+				logLevels: ['warn', 'error']
+			}
 		},
 		build: {
 			target: 'esnext',
