@@ -118,9 +118,15 @@ export function getLastCommitDate(toRef) {
  *
  * @param {string} destFile - The path to the changelog file.
  * @param {string} commitMessage - The commit message to use.
+ * @param {string} [rssFile] - The path to the changelog file, if any.
  */
-export function commitChangelog(destFile, commitMessage) {
+export function commitChangelog(destFile, commitMessage, rssFile) {
 	invokeGit('add', destFile);
+
+	if (rssFile) {
+		invokeGit('add', rssFile);
+	}
+
 	invokeGit('commit', '-m', commitMessage);
 }
 
