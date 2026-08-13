@@ -117,7 +117,7 @@ date: ${date}
 versionName: ${versionName}
 ---
 
-[compare changes](${baseUrl}/compare/${fromRef}...${toRef})`;
+[compare changes](${baseUrl}/compare/${fromRef}...${toRef})\n`;
 
 	for (const [group, items = []] of parsedCommits) {
 		changelog += `\n### ${sectionHeaders[group] ?? ''}\n\n`;
