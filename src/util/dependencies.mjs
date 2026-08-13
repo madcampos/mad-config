@@ -124,7 +124,7 @@ export function execDependency(dependency, ...params) {
 			throw new Error(spawnResult.stderr);
 		}
 
-		return spawnResult.stdout.trim();
+		return spawnResult.stdout.replaceAll(/^['"]|['"]$/ugm, '').trim();
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
 			console.error('Permission to spawn child processes is required.');
