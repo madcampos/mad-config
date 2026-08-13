@@ -3,9 +3,9 @@
 /// <reference types="@types/node" />
 
 import { parseArgs } from 'node:util';
-import { changelogFromCommits } from '../src/util/changelog.mjs';
+import { changelogFromCommits, rssChangelogFromCommits } from '../src/util/changelog.mjs';
 import { showHelp } from '../src/util/cli.mjs';
-import { getPackageVersion, writeChangelogFile } from '../src/util/files.mjs';
+import { getPackageVersion, wirteRssNewItem, writeChangelogFile } from '../src/util/files.mjs';
 import {
 	commitChangelog,
 	createGitTag,
@@ -95,6 +95,14 @@ const config = /** @type {const} */ ({
 			message: 'Create a GitHub release using the gh CLI.'
 		}
 	},
+	'rss': {
+		type: 'string',
+		short: 'l',
+		help: {
+			message: 'RSS file to update.',
+			value: 'path'
+		}
+	},
 	'help': {
 		type: 'boolean',
 		short: 'h',
@@ -126,11 +134,7 @@ if ((options.commit && options.push)) {
 
 // #region Program logic
 let versionName = options.to;
-const packageVersion = await getPackageVersion(options['package-json-path']);
-
-if (packageVersion) {
-	versionName = packageVersion;
-}
+versionName ||= await getPackageVersion(options['package-json-path']);
 
 const fromRef = getFromRef(versionName, options.from);
 const commits = getCommits(fromRef, versionName);
@@ -151,6 +155,19 @@ const changelogFile = await writeChangelogFile(options.output, versionName, chan
 if (!changelogFile) {
 	console.error('Failed to write changelog file.');
 	process.exit(1);
+}
+
+if (options.rss) {
+	const newItem = rssChangelogFromCommits({
+		commits,
+		baseUrl,
+		date: changelogDate,
+		fromRef,
+		toRef: versionName,
+		versionName
+	});
+
+	await wirteRssNewItem(options.rss, newItem);
 }
 
 if (options.commit || options.push) {

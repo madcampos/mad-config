@@ -145,6 +145,34 @@ export async function writeChangelogFile(outputDir, fileName, changelog) {
 }
 
 /**
+ * Writes a new `<item>` to the RSS file.
+ *
+ * @param {string} rssFile - The RSS file to edit.
+ * @param {string} item - The new `<item>` string to add.
+ */
+export async function wirteRssNewItem(rssFile, item) {
+	try {
+		process.permission?.has('fs.read', rssFile);
+		process.permission?.has('fs.write', rssFile);
+
+		const contents = await readFile(rssFile, { encoding: 'utf-8' });
+		const index = contents.search(/<item>|<\/channel>/iu);
+
+		if (index !== -1) {
+			const updatedContents = `${contents.substring(0, index)}${item}${contents.substring(index)}`;
+			await writeFile(rssFile, updatedContents, 'utf-8');
+		}
+	} catch (err) {
+		if (err?.code === 'ERR_ACCESS_DENIED') {
+			console.error('Permission to read changelog file is required.');
+			return;
+		}
+
+		throw err;
+	}
+}
+
+/**
  * Reads a template file from the templates directory.
  *
  * @param {string} fileName

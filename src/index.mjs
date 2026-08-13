@@ -5,7 +5,8 @@
  */
 
 export {
-	changelogFromCommits
+	changelogFromCommits,
+	rssChangelogFromCommits
 } from './util/changelog.mjs';
 
 export {
@@ -15,6 +16,7 @@ export {
 	readPackageJson,
 	readTemplateFile,
 	updatePackageJson,
+	wirteRssNewItem,
 	writeChangelogFile,
 	writeTextFile
 } from './util/files.mjs';
