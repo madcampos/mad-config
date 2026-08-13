@@ -40,9 +40,10 @@ const config = /** @type {const} */ ({
 	'to': {
 		type: 'string',
 		short: 't',
-		default: 'HEAD',
+		default: '',
 		help: {
 			message: 'Ending git tag/commit.',
+			default: 'HEAD',
 			value: 'ref'
 		}
 	},
@@ -135,6 +136,7 @@ if ((options.commit && options.push)) {
 // #region Program logic
 let versionName = options.to;
 versionName ||= await getPackageVersion(options['package-json-path']);
+versionName ||= 'HEAD';
 
 const fromRef = getFromRef(versionName, options.from);
 const commits = getCommits(fromRef, versionName);
