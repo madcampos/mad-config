@@ -1,3 +1,4 @@
+gitChecks: false
 minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
   # Add packages to exclude from the minimum release age
