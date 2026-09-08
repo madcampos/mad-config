@@ -48,6 +48,7 @@
 	"exports": {
 		".": "./src/index.mjs"
 	},
+	"types": "./src/index.d.ts",
 	"bin": {
 		"changelog": "./bin/changelog.mjs",
 		"init": "./bin/init.mjs",
