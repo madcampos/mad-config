@@ -1,7 +1,7 @@
 // oxlint-disable typescript/no-unnecessary-condition
 
 import { spawnSync } from 'node:child_process';
-import { readPackageJson } from './files.mjs';
+import { existsSync } from 'node:fs';
 
 /**
  * Installs dependencies using `pnpm`.
@@ -42,11 +42,9 @@ export function installDependencies(isDev = false, ...dependencies) {
 /**
  * Init a repository using `pnpm`.
  */
-export async function initRepo() {
+export function initRepo() {
 	try {
-		try {
-			await readPackageJson();
-		} catch {
+		if (!existsSync('package.json')) {
 			process.permission?.has('child', 'pnpm');
 
 			const spawnResult = spawnSync('pnpm', ['init', '-y'], {
