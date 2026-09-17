@@ -15,7 +15,7 @@ export function installDependencies(isDev = false, ...dependencies) {
 
 		const spawnResult = spawnSync('pnpm', [
 			'install',
-			isDev ? ' --save-dev' : '',
+			isDev ? '--save-dev' : '',
 			...dependencies.filter(Boolean)
 		], {
 			shell: false,
