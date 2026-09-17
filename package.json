@@ -50,7 +50,6 @@
 	},
 	"types": "./src/index.d.ts",
 	"bin": {
-		"@mad-c/config": "./bin/init.mjs",
 		"changelog": "./bin/changelog.mjs",
 		"init": "./bin/init.mjs",
 		"update": "./bin/update.mjs"
