@@ -67,6 +67,7 @@ export async function updatePackageJson(newContent, packagePath = 'package.json'
 		/** @type {PackageJson} */
 		const packageJson = JSON.parse(await readFile(packagePath, 'utf-8'));
 
+		// TODO: deep merge and ignore existing items
 		/** @type {PackageJson} */
 		const updatedContent = {
 			...packageJson,
@@ -205,6 +206,10 @@ export async function readTemplateFile(fileName) {
  */
 export async function copyTemplateFile(fileName, destPath, data = {}) {
 	try {
+		if (existsSync(destPath)) {
+			return;
+		}
+
 		let contents = await readTemplateFile(fileName);
 
 		Object.entries(data).forEach(([key, value]) => {
