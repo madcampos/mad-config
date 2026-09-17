@@ -127,7 +127,8 @@ export function execDependency(dependency, ...params) {
 			throw new Error(spawnResult.stderr);
 		}
 
-		return spawnResult.stdout.replaceAll(/^['"]|['"]$/ugm, '').trim();
+		// oxlint-disable-next-line typescript/no-unnecessary-type-conversion
+		return (spawnResult.stdout?.toString() || '').replaceAll(/^['"]|['"]$/ugm, '').trim();
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
 			console.error('Permission to spawn child processes is required.');
