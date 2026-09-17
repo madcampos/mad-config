@@ -57,7 +57,7 @@ try {
 	initGit();
 
 	console.log(styleText('cyan', 'Running pnpm init'));
-	initRepo();
+	await initRepo();
 	const packageJson = await readPackageJson();
 	// #endregion
 

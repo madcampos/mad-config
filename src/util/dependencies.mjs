@@ -1,6 +1,7 @@
 // oxlint-disable typescript/no-unnecessary-condition
 
 import { spawnSync } from 'node:child_process';
+import { readPackageJson } from './files.mjs';
 
 /**
  * Installs dependencies using `pnpm`.
@@ -41,22 +42,26 @@ export function installDependencies(isDev = false, ...dependencies) {
 /**
  * Init a repository using `pnpm`.
  */
-export function initRepo() {
+export async function initRepo() {
 	try {
-		process.permission?.has('child', 'pnpm');
+		try {
+			await readPackageJson();
+		} catch {
+			process.permission?.has('child', 'pnpm');
 
-		const spawnResult = spawnSync('pnpm', ['init', '-y'], {
-			shell: false,
-			encoding: 'utf-8',
-			stdio: ['ignore', 'ignore', 'pipe']
-		});
+			const spawnResult = spawnSync('pnpm', ['init', '-y'], {
+				shell: false,
+				encoding: 'utf-8',
+				stdio: ['ignore', 'ignore', 'pipe']
+			});
 
-		if (spawnResult.error) {
-			throw spawnResult.error;
-		}
+			if (spawnResult.error) {
+				throw spawnResult.error;
+			}
 
-		if (spawnResult.stderr) {
-			throw new Error(spawnResult.stderr);
+			if (spawnResult.stderr) {
+				throw new Error(spawnResult.stderr);
+			}
 		}
 	} catch (err) {
 		if (err?.code === 'ERR_ACCESS_DENIED') {
